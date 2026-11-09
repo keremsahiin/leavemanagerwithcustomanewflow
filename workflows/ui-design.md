@@ -81,8 +81,11 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
 - UI adımı olan bir plan, tasarım kaynağını yazar: `Tasarım: <link> — spec-NNNN-vK`.
 - BUILD UI adımlarında canvas'ın ilgili artboard'larını okur ve onlardan yapar: aynı ekranlar,
   aynı durumlar, aynı metinler. Design system varsa token'larını kullanır.
-- Canvas'ın kilitten sonra değiştiği görülürse (kapaktaki etiket spec'tekiyle aynı değil veya
-  artboard'lar insan tarafından değiştirilmiş) BUILD durur → R-08.
+- **Kilit kontrolü.** BUILD'in başında canvas'tan bir dosya okunur; araç okunan sürümün kimliğini
+  verir (`from version <id>`). Bu kimlik tasarım satırındaki kilit kimliğiyle karşılaştırılır.
+  Aynıysa kilitten sonra canvas'ta hiçbir şey değişmemiştir. Farklıysa BUILD durur ve insana
+  sorar: tasarım değiştiyse → R-08; tasarım dışı bir değişiklikse (ör. SHIP sayfası) insanın
+  teyidiyle devam edilir ve yeni kimlik plana not edilir.
 
 ### VERIFY ve SHIP — yan yana (R-7)
 1. **Ekran görüntüleri** — bağımsız VERIFY oturumu yakalar (`docs/testing.md`, Evidence for UI
@@ -95,6 +98,7 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
    çekimi tekrarlayın — tek tarayıcı açan Playwright daha güvenilirdir. Tarayıcı koşunun sonunda
    kapanır; ardından `msedge.exe` kalmadığı doğrulanır. Görüntüler repo dışında geçici bir dizinde.
 2. **SHIP sayfası** — ana oturum hazırlar (read-only reviewer'ın tasarıma erişimi yoktur):
+   önce kilit kontrolünü yapar (beklenen tek fark bu spec'in önceki `-ship` yayınlarıdır),
    görüntüleri canvas'a yükler, "SHIP" sayfasına ekran başına bir karşılaştırma artboard'u ekler
    (`ship--<ekran>.dc.html`): durum başına bir satır — Durum · Tasarım (`spec-NNNN-vK`, onaylı
    artboard `<dc-import>` ile) · Uygulama (ekran görüntüsü). Tasarımda olup görüntüsü olmayan

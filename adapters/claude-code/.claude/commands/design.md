@@ -49,6 +49,9 @@ below means that one.
    take the fallback in the same step 8 (dated export into the PR, its name on the line).
 
 **`ship` mode** (workflows/ui-design.md, VERIFY and SHIP step 2):
+0. Lock check: read `project/canvas.json`; the version id the read reports must equal the lock's
+   on the design line, or this spec's own last `-ship` publish. Different → stop and ask the
+   human (R-08).
 1. Upload each screenshot to the canvas as an asset.
 2. Add page "SHIP" if missing and one artboard per screen, `ship--<ekran>.dc.html`: per state a row
    Durum · Tasarım (`spec-<NNNN>-vK`, the locked artboard via `<dc-import>`, scaled to fit) ·

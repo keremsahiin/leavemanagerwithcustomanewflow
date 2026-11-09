@@ -10,4 +10,5 @@ has a filled "Approved by / on" line. Set the spec to "Status: In progress" (or 
 already is), then prompts/build.md. End with real ./scripts/check output and the changed-file
 list against the plan (as amended), write the handoff, STOP. Never review your own build.
 Project flow — a UI spec: build the UI steps from the locked design's artboards (workflows/ui-design.md,
-PLAN and BUILD); a canvas changed after the lock → stop, R-08.
+PLAN and BUILD); first compare the canvas's current version id with the lock's (its lock check):
+different → stop and ask (R-08).
