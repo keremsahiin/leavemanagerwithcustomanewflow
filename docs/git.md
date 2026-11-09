@@ -12,6 +12,13 @@
 - Agent tarafı engeller (`.claude/settings.json`): force push, hard reset, rebase, `rm -rf` ve
   `Remove-Item -Recurse -Force` hem Bash hem PowerShell aracı için reddedilir. Bu yalnızca agent'ı
   durdurur; gerçek koruma remote'ta branch protection'dır.
+- Remote: `https://github.com/keremsahiin/leavemanagerwithcustomanewflow` (private, kişisel hesap).
+  **Branch protection yok:** ücretsiz planda private repoda kullanılamıyor (API 403, 2026-11-09).
+  Bu yüzden "main'e doğrudan commit yok / force push yok" remote'ta zorlanmaz — agent deny
+  kuralları, bu belge ve CI'daki `doctor --strict` geçerlidir. Açılması için: GitHub Pro, bir
+  organizasyona (Team) transfer veya public repo. Açıldığında: PR zorunlu, `doctor` + `check`
+  zorunlu durum kontrolü, admin'e de uygulanır, force push ve silme kapalı, zorunlu review
+  onayı 0 (tek geliştirici; review'u `reviewer` subagent'ı yapar).
 
 ## Branching
 - `feature/<spec-no>-<short-name>` — **no branch without a spec.** Also for CHANGE-lane mini-specs.

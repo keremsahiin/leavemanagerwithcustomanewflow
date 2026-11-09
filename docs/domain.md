@@ -25,7 +25,9 @@
   de hesaba katılır.
 - **BR-3:** Bir çalışanın tarihleri çakışan iki aktif (`Pending` veya `Approved`) talebi olamaz.
 - **BR-4:** Talebi yalnızca çalışanın kayıtlı yöneticisi onaylar veya reddeder; yöneticisi
-  olmayan çalışanın talebini İK onaylar veya reddeder.
+  olmayan çalışanın talebini İK onaylar veya reddeder. Yöneticisi olmayan bir İK çalışanının
+  talebini **başka bir İK kullanıcısı** onaylar veya reddeder; seed verisinde en az iki İK
+  kullanıcısı bulunur (BR-5 ile tutarlılık — bootstrap 2026-11-09).
 - **BR-5:** Kimse kendi talebini onaylayamaz.
 - **BR-6:** Red gerekçesi zorunludur.
 - **BR-7:** Çalışan yalnızca `Pending` durumdaki kendi talebini iptal edebilir.
