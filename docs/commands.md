@@ -300,6 +300,26 @@ gate, handoff ending in `Next: <segment> — <who runs it>`, stop.
 - **Refusal:** none — no match is treated as R-10 (ambiguity).
 - **Common mistake:** improvising a fix instead of naming the ramp.
 
+## F — Project additions: `/design`
+
+Not part of the ANEW template: added by this project (spec 0001, ADR-0003). The rules live in
+`workflows/ui-design.md`; the Claude Design automation is Claude Code–only.
+
+### `/design`
+- **What it does:** for a UI spec, designs every screen × state on a Claude Design canvas, checks
+  coverage, and after spec approval locks the design (`spec-NNNN-vK` + version id); with `ship`,
+  builds the canvas's side-by-side SHIP page (locked design · screenshot per state).
+- **When to use it:** inside ANALYZE of a UI spec, before the spec approval gate (`/new-feature`
+  and `/analyze` point to it); with `ship`, before the ship gate.
+- **Reads / writes:** `workflows/ui-design.md` and the spec; writes the canvas (outside the repo)
+  and the spec's Design reference line. Never copies designs or screenshots into the repo.
+- **Stops at:** the canvas link and the label to lock (design mode); the SHIP page link and the
+  state table (ship mode).
+- **Lite / Strict:** no difference — the spec approval gate covers the design in both.
+- **Refusal:** a spec with no user interface (R-1); a locked design — a change is a spec change (R-08).
+- **Common mistake:** editing the canvas after the lock without R-08 — the build would follow a
+  design nobody approved.
+
 ## Recovery ramps
 
 Ramps are safe returns to the loop, not alternatives to it — each carries its own protection
@@ -327,6 +347,7 @@ lives in [`prompts/recovery/README.md`](../prompts/recovery/README.md).
 | `/refactor` | Behavior unchanged, proven | Approval · triage | Same | Same |
 | `/adr` | Record a decision | Your decision | Same | Same |
 | `/recover` | Run the matching ramp | Ramp confirmation | Same | Same |
+| `/design` | UI spec → designed, locked canvas; `ship` → side-by-side page (project addition) | Canvas link · label to lock | Same | Same |
 
 ## Two golden rules
 
