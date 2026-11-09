@@ -95,13 +95,16 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
 ### VERIFY ve SHIP — yan yana (R-7)
 1. **Ekran görüntüleri** — bağımsız VERIFY oturumu yakalar (`docs/testing.md`, Evidence for UI
    criteria): her ekran × durum için bir PNG, adı `<ekran>--<durum>.png`, 1280 px genişlik,
-   uygulama deterministik kipte. Tarayıcı: makinedeki Edge, headless — Playwright
-   (`channel="msedge"`) veya `msedge --headless=new --screenshot`. **Ayrı ve geçici bir
-   `--user-data-dir` şarttır**; yoksa çağrı açık Edge'e devredilir ve görüntü üretmez.
-   `msedge --screenshot` art arda çağrılınca zaman zaman çıkış kodu 0 ile **görüntüsüz** biter
-   (prova 0001): her görüntüye ayrı profil verin, her PNG'nin oluştuğunu kontrol edin, yoksa o
-   çekimi tekrarlayın — tek tarayıcı açan Playwright daha güvenilirdir. Tarayıcı koşunun sonunda
-   kapanır; ardından `msedge.exe` kalmadığı doğrulanır. Görüntüler repo dışında geçici bir dizinde.
+   uygulama deterministik kipte. Araç `docs/testing.md`'de ("Frameworks & layout": Playwright,
+   makinedeki Edge ile). Edge tuzakları (prova 0001):
+   - **Ayrı ve geçici bir `--user-data-dir` şarttır**; yoksa çağrı açık Edge'e devredilir ve
+     görüntü üretmez.
+   - CLI (`msedge --headless=new --screenshot`) art arda çağrılınca zaman zaman çıkış kodu 0 ile
+     **görüntüsüz** biter: her görüntüye ayrı profil, her PNG'nin varlık kontrolü, yoksa o çekim
+     tekrarlanır.
+   - Tarayıcı koşunun sonunda kapanır; ardından `msedge.exe` kalmadığı doğrulanır.
+
+   Görüntüler repo dışında geçici bir dizinde.
 2. **SHIP sayfası** — ana oturum hazırlar (read-only reviewer'ın tasarıma erişimi yoktur):
    önce kilit kontrolünü yapar (beklenen tek fark bu spec'in önceki `-ship` yayınlarıdır),
    görüntüleri canvas'a yükler, "SHIP" sayfasına ekran başına bir karşılaştırma artboard'u ekler
