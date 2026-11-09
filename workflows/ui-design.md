@@ -71,10 +71,15 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
 
 ### Onaydan sonra tasarım değişikliği (R-5)
 - Kilitten sonra "Tasarım" sayfasındaki artboard'larda yapılan her değişiklik bir **spec
-  değişikliğidir**: R-08 (`prompts/recovery/spec-change.md`). Spec revize edilir, yeni etiket
-  `spec-NNNN-v(K+1)` ile kilitlenir, yeniden onaylanır.
-- Design reference satırı yeni kilidi gösterir; önceki kilit bir alt satırda `Önceki:` olarak
-  kalır (spec'in git geçmişinde de).
+  değişikliğidir**: R-08 (`prompts/recovery/spec-change.md`). Sıra:
+  1. R-08'in ilk adımı spec'i günceller ve tasarım satırının altına bir işaret ekler:
+     `- Design change: R-08, <YYYY-MM-DD> — <ne değişiyor>`. Bu satır, R-08'in başladığını
+     dosyadan gösterir; `/design` kilitli canvas'ı yalnızca bu satır varken değiştirir.
+  2. Tasarım güncellenir (ANALYZE adımları 4–6, kapsama kontrolü dahil).
+  3. Spec yeniden onaylanır.
+  4. Onaydan sonra `spec-NNNN-v(K+1)` kilidi yayınlanır: tasarım satırı yeni kilidi gösterir,
+     önceki kilit bir alt satırda `Önceki:` olarak kalır, `Design change:` satırı kaldırılır
+     (spec'in git geçmişinde kalır).
 - "SHIP" sayfasına artboard eklemek tasarım değişikliği değildir.
 
 ### PLAN ve BUILD (R-6)

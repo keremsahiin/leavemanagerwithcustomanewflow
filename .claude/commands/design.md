@@ -16,8 +16,9 @@ below means that one.
   Changed behavior touches no screen. Create nothing, stop.
 - Design mode (no `ship`): if the design line already holds a lock (`spec-<NNNN>-vK`), refuse:
   "Design is locked at spec-<NNNN>-vK — a change is a spec change (R-08,
-  prompts/recovery/spec-change.md)." Continue only when the human has started R-08 for this
-  spec; the new lock is then v(K+1).
+  prompts/recovery/spec-change.md)." Continue only when R-08 has started, which the spec shows
+  by a `- Design change: R-08, <date> — …` line under the design line (workflows/ui-design.md,
+  R-5); the new lock is then v(K+1), published only after the spec is approved again.
 - `ship` mode: needs a lock in the design line and the folder of screenshots
   (`<ekran>--<durum>.png`, outside the repo) — ask for the folder if it was not given.
 
