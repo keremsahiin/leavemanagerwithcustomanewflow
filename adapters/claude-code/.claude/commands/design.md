@@ -45,4 +45,9 @@ Claude Design mechanics for spec $ARGUMENTS. Reply in the chat language (AGENTS.
 3. Publish with `label: spec-<NNNN>-vK-ship`; hand back the canvas link (SHIP page) and the
    state table with its marks. The human judges at the SHIP gate.
 
+Mechanics that bite on this machine (rehearsal 0001): give the Artifact tool the scratchpad's
+long path (`pwd -W`), not the 8.3 short form (`KEREM~1.SAH`), or publishing is blocked by a read
+rule; upload screenshots one `file_path` per call — a `file_paths` batch from the scratchpad is
+refused.
+
 Never copy design files or screenshots into the repo (ANEW-0006). Stop when the mode's step ends.
