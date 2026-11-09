@@ -38,7 +38,7 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
    çıkarılır.
 3. **Design system.** Projenin design system'i (Claude'da "Leave Manager" adlı Design System
    artifact'i, spec 0002) varsa canvas onu kurar. Yoksa geçici bir görünümle devam edilir ve
-   "design system yok" notu kapağa ve spec'in Design reference satırına düşer. Design system
+   "design system yok" notu kapağa ve spec'in tasarım satırına düşer. Design system
    sonradan geldiğinde böyle bir tasarım kendiliğinden güncellenmez; gerekirse R-08.
 4. **Canvas** oluşturulur veya güncellenir: listedeki her ekran × durum için bir artboard.
    Metinler Türkçe; gerçek `button`/`input`/`label`; kontrast WCAG AA (4.5:1).
@@ -136,8 +136,8 @@ Kurallar aynıdır, mekanik elle yapılır:
 1. Tasarımı claude.ai'da bir **Design** canvas'ı olarak yapın (ya da sabit sürüm verebilen
    herhangi bir tasarım aracında); ekran × durum başına bir artboard, yukarıdaki adlarla.
 2. Kapsama kontrolünü UX listesine karşı elle yapın; eksik varsa onaya sunmayın.
-3. Onay anında canvas'ın sürüm geçmişinden o sürümü not edin ve Design reference satırını
-   aynı biçimde yazın (etiket olarak `spec-NNNN-vK`, sürüm kimliği yerine tarih/saat).
+3. Onay anında canvas'ın sürüm geçmişinden o sürümü not edin ve tasarım satırını (Design
+   reference; mini-spec'te `Design:`) aynı biçimde yazın (etiket olarak `spec-NNNN-vK`, sürüm kimliği yerine tarih/saat).
 4. BUILD'den önce kilit kontrolünü elle yapın: sürüm geçmişinde kilit tarih/saatinden sonra bir
    sürüm varsa durun ve sorun; tasarım değiştiyse R-08 ("PLAN ve BUILD", Kilit kontrolü).
 5. SHIP'te ekran görüntülerini canvas'ın "SHIP" sayfasına veya PR'a durum başına tasarımın

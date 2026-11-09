@@ -313,7 +313,8 @@ Not part of the ANEW template: added by this project (spec 0001, ADR-0003). The 
   and `/analyze` point to it) — also ANALYZE (mini) of a UI mini-spec (`/change` points to it);
   with `ship`, before the ship gate.
 - **Reads / writes:** `workflows/ui-design.md` and the spec; writes the canvas (outside the repo)
-  and the spec's Design reference line. Never copies designs or screenshots into the repo.
+  and the spec's design line (Design reference, or a mini-spec's `Design:`). Never copies designs
+  or screenshots into the repo.
 - **Stops at:** the canvas link and the label to lock (design mode); the SHIP page link and the
   state table (ship mode).
 - **Lite / Strict:** no difference — the spec approval gate covers the design in both.
