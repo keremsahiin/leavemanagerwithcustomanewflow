@@ -110,7 +110,9 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
 
    Görüntüler repo dışında geçici bir dizinde.
 2. **SHIP sayfası** — ana oturum hazırlar (read-only reviewer'ın tasarıma erişimi yoktur):
-   önce kilit kontrolünü yapar (beklenen tek fark bu spec'in önceki `-ship` yayınlarıdır),
+   önce kilit kontrolünü yapar (beklenen tek fark bu spec'in önceki `-ship` yayınlarıdır; onların
+   kimlikleri planın Build evidence'ındadır), yayından sonra kendi kimliğini oraya yazar
+   (`SHIP yayını: spec NNNN · spec-NNNN-vK-ship · <id> · <tarih>`),
    görüntüleri canvas'a yükler, "SHIP" sayfasına ekran başına bir karşılaştırma artboard'u ekler
    (`ship--<ekran>.dc.html`): durum başına bir satır — Durum · Tasarım (`spec-NNNN-vK`, onaylı
    artboard `<dc-import>` ile) · Uygulama (ekran görüntüsü). Tasarımda olup görüntüsü olmayan

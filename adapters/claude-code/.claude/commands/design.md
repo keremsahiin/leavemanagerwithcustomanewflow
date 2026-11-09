@@ -51,15 +51,16 @@ below means that one.
 
 **`ship` mode** (workflows/ui-design.md, VERIFY and SHIP step 2):
 0. Lock check: read `project/canvas.json`; the version id the read reports must equal the lock's
-   on the design line, or this spec's own last `-ship` publish. Different → stop and ask the
-   human (R-08).
+   on the design line, or the last id recorded in the plan's Build evidence (a `SHIP yayını:`
+   line, or a version the human confirmed). Different → stop and ask the human (R-08).
 1. Upload each screenshot to the canvas as an asset.
 2. Add page "SHIP" if missing and one artboard per screen, `ship--<ekran>.dc.html`: per state a row
    Durum · Tasarım (`spec-<NNNN>-vK`, the locked artboard via `<dc-import>`, scaled to fit) ·
    Uygulama (the screenshot). A designed state without a screenshot → "UYGULAMADA YOK"; a
    screenshot without a designed state → "TASARIMDA YOK". Never edit the "Tasarım" artboards.
-3. Publish with `label: spec-<NNNN>-vK-ship`; hand back the canvas link (SHIP page) and the
-   state table with its marks. The human judges at the SHIP gate.
+3. Publish with `label: spec-<NNNN>-vK-ship`; record it in the plan's Build evidence as
+   `SHIP yayını: spec <NNNN> · spec-<NNNN>-vK-ship · <version id> · <date>`; hand back the canvas
+   link (SHIP page) and the state table with its marks. The human judges at the SHIP gate.
 
 Mechanics that bite on this machine (rehearsal 0001): give the Artifact tool the scratchpad's
 long path (`pwd -W`), not the 8.3 short form (`KEREM~1.SAH`), or publishing is blocked by a read
