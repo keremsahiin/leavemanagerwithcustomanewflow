@@ -10,3 +10,5 @@ it instead of verifying again.
 Use prompts/verify.md: run tests to capture real output and produce the criterion ↔ evidence
 table; a claim without evidence is a gap, and gaps are findings. Do not write or modify any
 production code. Write the handoff, STOP. Do not ship, merge, or move files.
+Project flow — a UI spec: capture the screenshots as workflows/ui-design.md (VERIFY and SHIP,
+step 1) says; the main session then builds the side-by-side SHIP page with `/design <NNNN> ship`.
