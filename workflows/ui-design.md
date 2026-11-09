@@ -49,6 +49,10 @@ canvas oluşturmaz.
 
    Design system yoksa satırın sonuna `— design system yok` eklenir. Eski bir sürüme insan
    canvas'ın sürüm geçmişinden ulaşır (araç eski sürümü okuyamaz — spike 0001).
+   **Yedek yol (R-3).** İnsan da eski sürümleri sürüm geçmişinden açamıyorsa (platform
+   değişirse): onay anında tasarımın tarihli bir PDF/PNG export'u alınır (canvas'ın Share ›
+   Export menüsünden; araç alamıyorsa insan alır), PR'a eklenir ve satırın sonuna export'un adı
+   yazılır: `— export: <dosya adı>, <YYYY-MM-DD>`. Export dosyası repoya girmez.
    **Mini-spec:** aynı biçim `Design:` satırında; önce/sonra karşılaştırması için önceki onaylı
    sürüm de yazılır: `Design: <link> — spec-NNNN-vK (…); önceki: spec-MMMM-vJ (…)`.
 

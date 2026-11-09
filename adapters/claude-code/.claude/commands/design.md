@@ -34,7 +34,8 @@ Claude Design mechanics for spec $ARGUMENTS. Reply in the chat language (AGENTS.
 7. **Lock — only after the human approves the spec:** update the cover with
    "Onaylı: spec-<NNNN>-vK, <date>" and publish it with `label: spec-<NNNN>-vK`; write the Design
    reference line exactly as workflows/ui-design.md step 8 shows, with the version id from that
-   publish result.
+   publish result. If the human cannot open earlier versions from the canvas's version history,
+   take the fallback in the same step 8 (dated export into the PR, its name on the line).
 
 **`ship` mode** (workflows/ui-design.md, VERIFY and SHIP step 2):
 1. Upload each screenshot to the canvas as an asset.
