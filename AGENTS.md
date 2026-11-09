@@ -35,5 +35,6 @@ Hassas alanlar: Yetkilendirme · Bakiye hesabı · Kişisel veri (KVKK) — `doc
 | Decisions (ADRs) · roles (who may do what) | `docs/decisions/` · `docs/roles/` |
 | Specs & plans | `specs/active/` · `specs/plans/` · shipped → `specs/done/` · deferred findings → `specs/backlog.md` |
 | Processes & gates · prompts & recovery ramps | `workflows/` · `prompts/` |
+| UI/UX tasarım akışı (Claude Design) — her UI spec'i | `workflows/ui-design.md` |
 | Every command: what it does, where it stops, lite vs strict | `docs/commands.md` |
 | The single verification command | `scripts/check` |
