@@ -2,9 +2,11 @@
 
 - Status: Accepted
 - Date: 2026-11-09
+- Revised: 2026-11-09 — editoryal: ANEW-0008'e bağlantı; sapma listesine `change.md` eklendi
+  (review round 1: L-3, M-2/A-1); karar değişmedi
 
 ## Context
-ANEW-0008 kullanıcı deneyimini spec'e koyar (akış, durumlar, tasarım linki) ama tasarım aracı
+[ANEW-0008](anew/ANEW-0008-ux-lives-in-the-spec.md) kullanıcı deneyimini spec'e koyar (akış, durumlar, tasarım linki) ama tasarım aracı
 entegrasyonunu **core için** reddeder: araca özgüdür ve şablonu şişirir. Leave Manager'da ise
 tasarım bağlantısı opsiyonel kaldığı için VERIFY'daki ekran görüntüsü yalnızca metinle
 karşılaştırılıyor ve görünüm her ekranda yeniden icat ediliyor. Ekip Claude Code kullanıyor ve
@@ -31,7 +33,7 @@ komutunda yaşar. ANEW'in kendi kuralları (`workflows/segments.md`, `prompts/`,
     (ANEW-0006), paylaşım canvas'ın Share menüsünden.
   - **Adaptör sapması** — şu dosyalar ANEW v1.24.1 şablonundan ayrışır, sürüm yükseltmede
     elle yeniden uygulanır: `.claude/commands/design.md` ve
-    `.claude/commands/{analyze,new-feature,plan,build,verify}.md` (her biri hem kurulu kopya hem
+    `.claude/commands/{analyze,new-feature,plan,build,verify,change}.md` (her biri hem kurulu kopya hem
     `adapters/claude-code/` kaynağı), `adapters/cursor/commands/design.md`,
     `adapters/github-copilot/prompts/design.prompt.md`, `adapters/codex/skills/design/` (iki
     dosya), `docs/commands.md` (`/design` bölümü ve satırı).
