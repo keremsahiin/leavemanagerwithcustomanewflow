@@ -10,6 +10,13 @@
 mini-spec'leri dahil. Diğer spec'ler için hiçbir şey değişmez; `/design` onlarda çalışmaz ve
 canvas oluşturmaz.
 
+**Mini-spec (CHANGE lane).** Şablonunda (`specs/TEMPLATE-mini.md`) "User experience" bölümü
+yoktur. `Design:` satırı doluysa ya da Changed behavior bir ekranı veya bir durumunu
+değiştiriyorsa UI spec'idir; ikisi de yoksa akış uygulanmaz. Ekran × durum listesi, Changed ve
+Preserved behavior kriterlerinin dokunduğu ekran × durumlardır. Aşağıda "tasarım satırı" denen
+satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır; kilit, taslak ve
+`Design change:` satırları mini-spec'te orada taşınır.
+
 ## Kavramlar
 - **Canvas** — Claude'da **Design** türünden bir artifact. Spec başına bir tane; başlığı
   `Leave Manager — spec NNNN <kısa ad>`. Private'tır; paylaşım Share menüsünden.
@@ -27,7 +34,8 @@ canvas oluşturmaz.
 
 ### ANALYZE — tasarla ve kilitle (R-2, R-3, R-4)
 1. Analyst UX bölümünü yazar: akış, her ekranın durumları, erişilebilirlik (ANEW-0008).
-2. **Ekran × durum listesi** UX bölümünden çıkarılır.
+2. **Ekran × durum listesi** UX bölümünden (mini-spec: Changed ve Preserved behavior'dan)
+   çıkarılır.
 3. **Design system.** Projenin design system'i (Claude'da "Leave Manager" adlı Design System
    artifact'i, spec 0002) varsa canvas onu kurar. Yoksa geçici bir görünümle devam edilir ve
    "design system yok" notu kapağa ve spec'in Design reference satırına düşer. Design system
@@ -97,8 +105,8 @@ canvas oluşturmaz.
 - `/design <NNNN>` — ANALYZE adımları 2–8: canvas'ı oluşturur/günceller, kapsama kontrolü,
   onaydan sonra kilit. Kilitli bir spec'te reddeder ve R-08'e yönlendirir.
 - `/design <NNNN> ship` — VERIFY/SHIP adımı 2: SHIP sayfası.
-- Segment komutları (`/analyze`, `/new-feature`, `/plan`, `/build`, `/verify`) UI spec'lerinde
-  bu dosyaya işaret eder.
+- Segment komutları (`/analyze`, `/new-feature`, `/plan`, `/build`, `/verify`) ve `/change`
+  (CHANGE lane, mini-spec) UI spec'lerinde bu dosyaya işaret eder.
 
 ## Elle yol (Cursor, Copilot, Codex, diğer araçlar — R-8)
 Kurallar aynıdır, mekanik elle yapılır:

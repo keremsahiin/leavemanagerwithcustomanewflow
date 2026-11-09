@@ -310,13 +310,15 @@ Not part of the ANEW template: added by this project (spec 0001, ADR-0003). The 
   coverage, and after spec approval locks the design (`spec-NNNN-vK` + version id); with `ship`,
   builds the canvas's side-by-side SHIP page (locked design · screenshot per state).
 - **When to use it:** inside ANALYZE of a UI spec, before the spec approval gate (`/new-feature`
-  and `/analyze` point to it); with `ship`, before the ship gate.
+  and `/analyze` point to it) — also ANALYZE (mini) of a UI mini-spec (`/change` points to it);
+  with `ship`, before the ship gate.
 - **Reads / writes:** `workflows/ui-design.md` and the spec; writes the canvas (outside the repo)
   and the spec's Design reference line. Never copies designs or screenshots into the repo.
 - **Stops at:** the canvas link and the label to lock (design mode); the SHIP page link and the
   state table (ship mode).
 - **Lite / Strict:** no difference — the spec approval gate covers the design in both.
-- **Refusal:** a spec with no user interface (R-1); a locked design — a change is a spec change (R-08).
+- **Refusal:** a spec with no user interface — a mini-spec: empty `Design:` and no screen touched
+  (R-1); a locked design — a change is a spec change (R-08).
 - **Common mistake:** editing the canvas after the lock without R-08 — the build would follow a
   design nobody approved.
 

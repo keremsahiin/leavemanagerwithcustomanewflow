@@ -5,20 +5,26 @@ argument-hint: <NNNN> [ship]
 Read AGENTS.md and workflows/ui-design.md — the rules live there; this command only runs the
 Claude Design mechanics for spec $ARGUMENTS. Reply in the chat language (AGENTS.md).
 
+**The design line** is the spec's Design reference line — in a mini-spec
+(specs/TEMPLATE-mini.md) its `Design:` line (workflows/ui-design.md, R-1). Every "design line"
+below means that one.
+
 **Entry checks (from files, never from chat):**
-- `specs/active/<NNNN>-*.md` must exist. If its "User experience" is `none — no user interface`,
-  refuse: "Spec <NNNN> has no user interface — no design step (workflows/ui-design.md, R-1)."
-  Create nothing, stop.
-- Design mode (no `ship`): if the spec's Design reference already holds a lock
-  (`spec-<NNNN>-vK`), refuse: "Design is locked at spec-<NNNN>-vK — a change is a spec change
-  (R-08, prompts/recovery/spec-change.md)." Continue only when the human has started R-08 for
-  this spec; the new lock is then v(K+1).
-- `ship` mode: needs a lock in the Design reference and the folder of screenshots
+- `specs/active/<NNNN>-*.md` must exist. Refuse with "Spec <NNNN> has no user interface — no
+  design step (workflows/ui-design.md, R-1)." when its "User experience" is
+  `none — no user interface`, or, for a mini-spec, when its `Design:` line is empty and its
+  Changed behavior touches no screen. Create nothing, stop.
+- Design mode (no `ship`): if the design line already holds a lock (`spec-<NNNN>-vK`), refuse:
+  "Design is locked at spec-<NNNN>-vK — a change is a spec change (R-08,
+  prompts/recovery/spec-change.md)." Continue only when the human has started R-08 for this
+  spec; the new lock is then v(K+1).
+- `ship` mode: needs a lock in the design line and the folder of screenshots
   (`<ekran>--<durum>.png`, outside the repo) — ask for the folder if it was not given.
 
 **Design mode** (workflows/ui-design.md, ANALYZE steps 2–8):
-1. Build the screen × state list from the spec's User experience.
-2. Canvas: the Design reference names a canvas → revise it (read `project/canvas.json` first).
+1. Build the screen × state list from the spec's User experience (a mini-spec: the screens and
+   states its Changed and Preserved behavior criteria touch).
+2. Canvas: the design line names a canvas → revise it (read `project/canvas.json` first).
    Otherwise create one from the **Design** Artifact type (list the types; never standalone
    claude.ai/design or DesignSync), title `Leave Manager — spec <NNNN> <short name>`, and follow
    the type's instructions for its files. Work files go in the scratchpad, never the repo.
@@ -32,9 +38,9 @@ Claude Design mechanics for spec $ARGUMENTS. Reply in the chat language (AGENTS.
    do NOT ask for spec approval. No other read-back, render or screenshot of the canvas.
 6. Hand back the canvas link and the label approval will lock: `spec-<NNNN>-v<K>`.
 7. **Lock — only after the human approves the spec:** update the cover with
-   "Onaylı: spec-<NNNN>-vK, <date>" and publish it with `label: spec-<NNNN>-vK`; write the Design
-   reference line exactly as workflows/ui-design.md step 8 shows, with the version id from that
-   publish result. If the human cannot open earlier versions from the canvas's version history,
+   "Onaylı: spec-<NNNN>-vK, <date>" and publish it with `label: spec-<NNNN>-vK`; write the design
+   line exactly as workflows/ui-design.md step 8 shows (a mini-spec: on its `Design:` line, with
+   the previous lock as `önceki:`), with the version id from that publish result. If the human cannot open earlier versions from the canvas's version history,
    take the fallback in the same step 8 (dated export into the PR, its name on the line).
 
 **`ship` mode** (workflows/ui-design.md, VERIFY and SHIP step 2):
