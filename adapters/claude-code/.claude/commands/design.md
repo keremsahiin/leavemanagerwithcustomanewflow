@@ -25,9 +25,14 @@ below means that one.
 1. Build the screen × state list from the spec's User experience (a mini-spec: the screens and
    states its Changed and Preserved behavior criteria touch).
 2. Canvas: the design line names a canvas → revise it (read `project/canvas.json` first).
-   Otherwise create one from the **Design** Artifact type (list the types; never standalone
-   claude.ai/design or DesignSync), title `Leave Manager — spec <NNNN> <short name>`, and follow
-   the type's instructions for its files. Work files go in the scratchpad, never the repo.
+   Otherwise list the person's **Design** artifacts and look for the title
+   `Leave Manager — spec <NNNN>`: found → revise that one. None → create one from the **Design**
+   Artifact type (list the types; never standalone claude.ai/design or DesignSync), title
+   `Leave Manager — spec <NNNN> <short name>`, and follow the type's instructions for its files.
+   As soon as the canvas exists, write the draft design line into the spec —
+   `- Design reference: <link> — taslak (kilit yok)` (a mini-spec: `- Design: <link> — taslak
+   (kilit yok)`) — with no `spec-<NNNN>-vK` in it; the lock (step 7) overwrites it. Work files go
+   in the scratchpad, never the repo.
 3. Design system: list the "Design System" artifacts; one titled "Leave Manager" → install it per
    the type's instructions. None → own look, and say "design system yok" on the cover.
 4. Artboards: `Main.dc.html` is the cover (spec, screen × state list, design-system note, lock

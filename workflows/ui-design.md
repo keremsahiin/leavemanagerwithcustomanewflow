@@ -42,6 +42,11 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
    sonradan geldiğinde böyle bir tasarım kendiliğinden güncellenmez; gerekirse R-08.
 4. **Canvas** oluşturulur veya güncellenir: listedeki her ekran × durum için bir artboard.
    Metinler Türkçe; gerçek `button`/`input`/`label`; kontrast WCAG AA (4.5:1).
+   **Spec başına bir canvas:** yeni canvas açmadan önce aynı başlıklı (`Leave Manager — spec
+   NNNN`) canvas aranır; varsa o kullanılır. Canvas var olur olmaz linki tasarım satırına
+   **taslak** olarak yazılır — `- Design reference: <canvas linki> — taslak (kilit yok)` — ki
+   yeni bir oturum (R-09) onu dosyadan bulsun. Taslak satırda `spec-NNNN-vK` kalıbı bulunmaz;
+   kilit (8) bu satırın üzerine yazar.
 5. **Kapsama kontrolü.** Canvas'taki artboard'lar listeyle karşılaştırılır. Eksik varsa spec
    **onaya sunulmaz**; eksik durumlar adlarıyla (`<ekran> — <durum>`) listelenir.
 6. **İnsan turu.** İnsan canvas'ta yorum yapabilir veya düzenleyebilir; Claude yorumları uygular
