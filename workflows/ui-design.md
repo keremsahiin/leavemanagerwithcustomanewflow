@@ -86,11 +86,15 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
 - UI adımı olan bir plan, tasarım kaynağını yazar: `Tasarım: <link> — spec-NNNN-vK`.
 - BUILD UI adımlarında canvas'ın ilgili artboard'larını okur ve onlardan yapar: aynı ekranlar,
   aynı durumlar, aynı metinler. Design system varsa token'larını kullanır.
-- **Kilit kontrolü.** BUILD'in başında canvas'tan bir dosya okunur; araç okunan sürümün kimliğini
-  verir (`from version <id>`). Bu kimlik tasarım satırındaki kilit kimliğiyle karşılaştırılır.
-  Aynıysa kilitten sonra canvas'ta hiçbir şey değişmemiştir. Farklıysa BUILD durur ve insana
-  sorar: tasarım değiştiyse → R-08; tasarım dışı bir değişiklikse (ör. SHIP sayfası) insanın
-  teyidiyle devam edilir ve yeni kimlik plana not edilir.
+- **Kilit kontrolü (kural).** BUILD'den önce bakılır: canvas kilitten sonra değişti mi?
+  Değiştiyse BUILD durur ve insana sorar — tasarım değiştiyse → R-08; tasarım dışı bir
+  değişiklikse (ör. SHIP sayfası) insanın teyidiyle devam edilir ve yeni sürüm planın Build
+  evidence'ına not edilir. Her araçta geçerlidir; nasıl bakılacağı araca göre değişir:
+  - **Claude Code:** canvas'tan bir dosya okunur; araç okunan sürümün kimliğini bildirir
+    (`from version <id>`). Bu kimlik, tasarım satırındaki kilit kimliğine ya da planın Build
+    evidence'ında not edilmiş son kimliğe eşitse değişiklik yoktur.
+  - **Elle yol / kimliksiz tasarım satırı:** canvas'ın sürüm geçmişinde, tasarım satırındaki
+    kilit tarih/saatinden sonra bir sürüm varsa canvas değişmiştir (Elle yol, adım 4).
 
 ### VERIFY ve SHIP — yan yana (R-7)
 1. **Ekran görüntüleri** — bağımsız VERIFY oturumu yakalar (`docs/testing.md`, Evidence for UI
@@ -132,7 +136,9 @@ Kurallar aynıdır, mekanik elle yapılır:
 2. Kapsama kontrolünü UX listesine karşı elle yapın; eksik varsa onaya sunmayın.
 3. Onay anında canvas'ın sürüm geçmişinden o sürümü not edin ve Design reference satırını
    aynı biçimde yazın (etiket olarak `spec-NNNN-vK`, sürüm kimliği yerine tarih/saat).
-4. SHIP'te ekran görüntülerini canvas'ın "SHIP" sayfasına veya PR'a durum başına tasarımın
+4. BUILD'den önce kilit kontrolünü elle yapın: sürüm geçmişinde kilit tarih/saatinden sonra bir
+   sürüm varsa durun ve sorun; tasarım değiştiyse R-08 ("PLAN ve BUILD", Kilit kontrolü).
+5. SHIP'te ekran görüntülerini canvas'ın "SHIP" sayfasına veya PR'a durum başına tasarımın
    yanına koyun.
 
 ## Sınırlar (V1)
