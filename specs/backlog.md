@@ -13,3 +13,10 @@ step 7). Nothing lands here without that decision; noise is rejected in the tria
   — Recommendation: <the reviewer's action> — Deferred by: <name>, <YYYY-MM-DD>, <why>
   A decision deferred at bootstrap (its REPORT) uses Source: bootstrap <YYYY-MM-DD>.
 -->
+
+- **B-1** — Giriş denemesi sınırlama (rate limiting / geçici kilit) yok; kaba kuvvet şifre denemesine açık — Source: bootstrap 2026-11-09 (Konu 9, güvenlik) — Severity: Medium
+  — Recommendation: gerçek kullanıma geçmeden önce kullanıcı + IP bazında deneme sınırı ekle — Deferred by: Kerem Şahin, 2026-11-09, ilk sürüm bellek içi prototip
+- **B-2** — Çok faktörlü doğrulama (MFA) yok — Source: bootstrap 2026-11-09 (Konu 9, güvenlik) — Severity: Low
+  — Recommendation: kurumsal kimlik (AD/Entra ID) entegrasyonuyla birlikte ele al — Deferred by: Kerem Şahin, 2026-11-09, ilk sürüm kapsamı dar
+- **B-3** — Kullanıcının şifresini değiştirme ekranı yok; şifreler seed'den (`SEED_PASSWORD`) gelir — Source: bootstrap 2026-11-09 (Konu 9, güvenlik) — Severity: Low
+  — Recommendation: kalıcı saklamaya geçişle (ADR-0002 revisit) birlikte spec aç — Deferred by: Kerem Şahin, 2026-11-09, bellek içi sistemde şifre değişikliği yeniden başlatmada kaybolur

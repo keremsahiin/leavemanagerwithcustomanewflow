@@ -1,6 +1,7 @@
 # Testing
 
-> **Template — filled during bootstrap.**
+> Bootstrap 2026-11-09'da dolduruldu (Frameworks & layout, What must be tested). Diğer bölümler
+> ANEW'in test kurallarıdır, olduğu gibi geçerlidir.
 
 ## The contract
 - Every acceptance criterion maps to at least one test (criterion ↔ test map lives in the plan).
@@ -8,11 +9,35 @@
 - The whole suite runs inside `scripts/check` — one command, everywhere.
 
 ## Frameworks & layout
-<!-- Test framework(s), where tests live, naming pattern. -->
+
+| Katman | Araç | Kanıtladığı | Konum |
+|---|---|---|---|
+| Unit | pytest | `app/domain`: BR-1…BR-10, iş günü ve bakiye hesabı (saf fonksiyonlar) | `tests/unit/` |
+| Servis | pytest; bellek içi depo + sabit `Clock` | Kullanım senaryoları, yetki (BR-4, BR-5), durum geçişleri, denetim kaydı, kilit altında eşzamanlılık (BR-2, BR-3) | `tests/service/` |
+| API | pytest + FastAPI `TestClient` (process içi, sunucu yok) | HTTP sözleşmesi, hata eşlemesi (409/403/404/422), uçtan uca yetki, başkasının verisinin sızmaması | `tests/api/` |
+| Arayüz (component) | `node --test` + jsdom; `fetch` stub'lanır (`api.js`) | Her ekranın her durumu: boş, yükleniyor, hata, başarılı, yetki yok | `frontend/tests/` |
+| Mimari | import-linter | `docs/architecture.md` "Forbidden dependencies" | `pyproject.toml` |
+
+- Test adı kuralı taşır: `test_br2_request_exceeding_balance_is_rejected` (`docs/conventions.md`).
+- Her test kendi boş deposu ve kendi uygulamasıyla başlar (`create_app(store, clock)` fixture'ı);
+  bir koşunun verisi sonrakine geçmez (Resource hygiene, rule 5).
+- **Determinism (bu stack):** testlerde ve ekran görüntüsü modunda `Clock` sabit; saat dilimi
+  Europe/Istanbul, yerel ayar `tr-TR`; veri sabit seed'den. İlk sürümde **CSS animasyonu ve
+  geçişi yok** — kapatılacak hareket olmaz; ileride eklenirse `prefers-reduced-motion` ile kapatılır.
+- **UI kanıtı (ekran görüntüsü):** VERIFY oturumu Python için Playwright'ı makinede kurulu
+  **Edge** ile (`channel="msedge"`, headless) çalıştırır; betik ve görüntüler repo dışında geçici
+  dizinde (Evidence for UI criteria). Playwright proje bağımlılığı değildir.
+- Kapsam yüzdesi (coverage) eşiği **yok** — kanıt kriter ↔ test eşlemesidir.
 
 ## What must be tested
-<!-- e.g. every business rule (BR-n), every boundary/forbidden dependency; the e2e journeys and
-     budget, if the project has e2e at all (Test layers). -->
+- Her iş kuralı BR-1…BR-10 (unit ve/veya servis) ve her alan değişmezi (`docs/domain.md`).
+- Her yasak bağımlılık (import-linter).
+- Her yetki kuralı — **hem servis hem API katmanında** (servis: kural; API: 403/404 eşlemesi ve
+  sızıntı yokluğu).
+- BR-2 ve BR-3 eşzamanlı isteklerde (kilit).
+- Spec'in "User experience" bölümündeki her UI durumu (component katmanı).
+- **e2e: yok — bütçe 0 yolculuk.** Gerekirse tek aday: "talep aç → yönetici onaylar → bakiye
+  düşer" (Playwright); eklemek ayrı bir karardır.
 
 ## Test layers
 1. **The cheapest test that proves the criterion.** Unit first, then component or integration
