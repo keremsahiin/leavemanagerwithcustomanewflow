@@ -22,12 +22,13 @@ const walk = (dir) =>
   });
 
 // A hex color in a value position — after ":", whitespace, ",", "(", "=" or a quote — but not an
-// in-page link (href="#…") or an SVG reference (url(#…)). An id selector at the start of a line is
-// not a value position; a hex followed by a word character or "-" is a name (#add-form), not a color.
-const RAW_HEX = /(?<=[:\s,(="'`;])(?<!href=["'])(?<!url\()#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})(?![\w-])/g;
-// A hex at column 0 is a value too when the line continues a declaration (`#333;`, `#333,` or
-// alone); an id selector there is followed by its rule (`#fade {`).
-const RAW_HEX_LINE_START = /^#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})(?=\s*[;,)]|\s*$)/g;
+// in-page link (href="#…") or an SVG reference (url(#…), url("#…")). An id selector at the start of
+// a line is not a value position; a hex followed by a word character or "-" is a name (#add-form).
+const RAW_HEX = /(?<=[:\s,(="'`;])(?<!href=["'])(?<!url\(\s*["']?)#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})(?![\w-])/g;
+// A hex at column 0 is a value only when it ends a declaration (`#333;`) or closes a call (`#333)`).
+// At column 0 an id selector may be followed by "{" (`#fade {`), "," (a selector list: `#add,`) or
+// nothing (Allman style: `#fade` then `{` on the next line) — none of those are flagged.
+const RAW_HEX_LINE_START = /^#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})(?=\s*[;)])/g;
 // CSS color functions; color() only with a color space, so a JS function named color() is not one.
 const COLOR_FN =
   /\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(|\bcolor\(\s*(?:srgb(?:-linear)?|display-p3|a98-rgb|prophoto-rgb|rec2020|xyz(?:-d50|-d65)?)\b/gi;
@@ -72,6 +73,10 @@ test("detector flags raw colors and spares ids and in-page links", () => {
     ".e { color: #0F172A99; }",
     ".f { color: hsl(220 90% 40%); }",
     ".g { color: oklch(0.5 0.1 250); }",
+    "#add,",
+    "#fade",
+    '.i { fill: url("#fade"); }',
+    ".j { fill: url('#add'); }",
   ].join("\n");
   assert.deepEqual(
     findings(fixture, ...RAW_COLOR).map((f) => f.line),
