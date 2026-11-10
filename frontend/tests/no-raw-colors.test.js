@@ -32,15 +32,24 @@ const RAW_HEX_LINE_START = /^#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})
 const COLOR_FN =
   /\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(|\bcolor\(\s*(?:srgb(?:-linear)?|display-p3|a98-rgb|prophoto-rgb|rec2020|xyz(?:-d50|-d65)?)\b/gi;
 const RAW_COLOR = [RAW_HEX, RAW_HEX_LINE_START, COLOR_FN];
-// External font or stylesheet requests: a remote @import or url(), a <link href> to another origin,
-// Google Fonts anywhere. A local @import ("./tokens.css") is same-origin and allowed (CSP 'self').
+// External font or stylesheet requests: a remote @import (with or without a space) or url(), a
+// <link href> to another origin, Google Fonts anywhere. A local @import ("./tokens.css") is
+// same-origin and allowed (CSP 'self').
 const EXTERNAL_FONT =
-  /@import\s+(?:url\(\s*)?["']?(?:https?:)?\/\/|url\(\s*["']?(?:https?:)?\/\/|<link\b[^>]*\bhref\s*=\s*["']?(?:https?:)?\/\/|fonts\.(?:googleapis|gstatic)\.com/gi;
+  /@import\s*(?:url\(\s*)?["']?(?:https?:)?\/\/|url\(\s*["']?(?:https?:)?\/\/|fonts\.(?:googleapis|gstatic)\.com/gi;
+// A <link> tag may span lines (formatters break long tags), so it is matched on the whole text.
+const EXTERNAL_LINK = /<link\b[^>]*?\bhref\s*=\s*["']?(?:https?:)?\/\//gi;
 
 const findings = (text, ...patterns) =>
   text.split(/\r?\n/).flatMap((line, i) =>
     patterns.flatMap((pattern) => [...line.matchAll(pattern)].map((m) => ({ line: i + 1, match: m[0] }))),
   );
+const findingsAcrossLines = (text, pattern) =>
+  [...text.matchAll(pattern)].map((m) => ({
+    line: text.slice(0, m.index).split("\n").length,
+    match: m[0].replace(/\s+/g, " "),
+  }));
+const externalFonts = (text) => [...findings(text, EXTERNAL_FONT), ...findingsAcrossLines(text, EXTERNAL_LINK)];
 const report = (path, found) =>
   found.map(({ line, match }) => `${relative(ROOT, path).split("\\").join("/")}:${line}: ${match}`);
 
@@ -79,10 +88,14 @@ test("detector flags external font requests", () => {
     '<link rel="stylesheet" href="https://use.typekit.net/abc.css">',
     '<link rel="stylesheet" href="css/tokens.css">',
     "@import 'https://fonts.bunny.net/css?family=x';",
+    '@import"https://use.typekit.net/a.css";',
+    '<link rel="stylesheet"',
+    '  href="https://use.typekit.net/b.css">',
+    '@import"./local.css";',
   ].join("\n");
   assert.deepEqual(
-    [...new Set(findings(fixture, EXTERNAL_FONT).map((f) => f.line))],
-    [1, 2, 5, 7],
+    [...new Set(externalFonts(fixture).map((f) => f.line))].sort((a, b) => a - b),
+    [1, 2, 5, 7, 8, 9],
   );
 });
 
@@ -95,7 +108,7 @@ test("no raw colors outside tokens.css", () => {
 
 test("no external font requests", () => {
   const violations = walk(FRONTEND).flatMap((path) =>
-    report(path, findings(readFileSync(path, "utf8"), EXTERNAL_FONT)),
+    report(path, externalFonts(readFileSync(path, "utf8"))),
   );
   assert.deepEqual(violations, [], `external font requests:\n${violations.join("\n")}`);
 });
