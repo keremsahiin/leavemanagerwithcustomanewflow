@@ -90,10 +90,12 @@ test("every color token is classified", () => {
 });
 
 test("type styles use the system font stack", () => {
-  const stack = props.get("font-sans");
-  assert.ok(stack, "--font-sans missing");
-  assert.match(stack, /system-ui/, "--font-sans is not a system font stack");
-  assert.doesNotMatch(stack, /url\(/i, "--font-sans loads a font file");
+  const families = [...props].filter(([name]) => name.startsWith("font-"));
+  assert.ok(families.length >= 1, "no --font-* family");
+  for (const [name, stack] of families) {
+    assert.match(stack, /system-ui/, `--${name} is not a system font stack`);
+    assert.doesNotMatch(stack, /url\(/i, `--${name} loads a font file`);
+  }
   const styles = [...props.keys()].filter((name) => name.endsWith("-size"));
   assert.ok(styles.length >= 5 && styles.length <= 7, `expected 5–7 type styles, found ${styles.length}`);
   for (const size of styles) {
