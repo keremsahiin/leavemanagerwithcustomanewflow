@@ -20,3 +20,5 @@ step 7). Nothing lands here without that decision; noise is rejected in the tria
   — Recommendation: kurumsal kimlik (AD/Entra ID) entegrasyonuyla birlikte ele al — Deferred by: Kerem Şahin, 2026-11-09, ilk sürüm kapsamı dar
 - **B-3** — Kullanıcının şifresini değiştirme ekranı yok; şifreler seed'den (`SEED_PASSWORD`) gelir — Source: bootstrap 2026-11-09 (Konu 9, güvenlik) — Severity: Low
   — Recommendation: kalıcı saklamaya geçişle (ADR-0002 revisit) birlikte spec aç — Deferred by: Kerem Şahin, 2026-11-09, bellek içi sistemde şifre değişikliği yeniden başlatmada kaybolur
+- **B-4** — `.nvmrc` yok (`docs/conventions.md` onu sabitleyici sayıyor); Node sürümü iki yerde yazılı (`scripts/check.conf` requires, `.github/workflows/check.yml` node-version) — Source: spec 0002, review round 1 (I-3; `docs/conventions.md:22`) — Severity: Info
+  — Recommendation: walking skeleton'da `.nvmrc` ekle, CI'da `node-version-file: .nvmrc` kullan — Deferred by: Kerem Şahin, 2026-11-10, toolchain sabitleme spec 0003'ün işi
