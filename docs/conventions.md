@@ -31,6 +31,9 @@
 - JSON alanları: `snake_case` (Pydantic varsayılanı; alias yok).
 - JS: değişken/fonksiyon `camelCase`, dosya `kebab-case.js`; CSS sınıfları `kebab-case`.
 - Frontend testleri: `frontend/tests/<ekran>.test.js`.
+- CSS custom property'leri (design token'ları, spec 0002): `--<token adı>` (önek yok, Design
+  System'deki adla birebir); yazı stili `--<stil>-size`, `--<stil>-line`, `--<stil>-weight`; aile
+  `--font-<aile>`. Kaynak: `frontend/css/tokens.css` (üretilir, elle düzenlenmez).
 
 ## Error handling
 - `domain` ve `services` tipli istisna fırlatır: `BusinessRuleViolation(code="BR-n")`,
@@ -75,3 +78,11 @@ Walking skeleton bu adımları `scripts/check.conf` içinde etkinleştirir; o za
 - import-linter — `docs/architecture.md` "Forbidden dependencies" sözleşmeleri.
 - Frontend'de HTML sink yasağı — `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`
   `frontend/` JS dosyalarında bulunursa check kırmızı (`docs/security.md`, Input & output).
+
+**Etkin (spec 0002, `test-js` adımı):**
+- Ham renk yasağı — `frontend/` altındaki `*.css`, `*.js`, `*.html` dosyalarında hex renk ve renk
+  fonksiyonu (`rgb()`, `hsl()`, `oklch()`…) yalnız `css/tokens.css`'te; harici font isteği
+  (`@import`, uzak `url()`, Google Fonts) hiçbir yerde. İhlal dosya:satır ile raporlanır
+  (`frontend/tests/no-raw-colors.test.js`). Adlı renkler (`red`, `white`…) review'da yakalanır.
+- Kontrast — her metin/zemin token çifti WCAG AA (4.5:1; form sınırı ve odak 3:1); her renk
+  token'ı ya bir çiftin ön planı ya "non-text" listesinde (`frontend/tests/tokens.test.js`).
