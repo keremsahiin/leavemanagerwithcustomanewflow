@@ -1,17 +1,41 @@
 // Spec 0002 — design tokens in frontend/css/tokens.css (AC-2, AC-3, AC-4, AC-5).
 // Values are read from tokens.css; which text sits on which ground is declared here (R-6).
+// A color token is any property in the converter's `/* color */` block — whatever its value's
+// form (review round 1, M-1): aliases `var(--x)` resolve to their target; any other form fails.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const css = readFileSync(fileURLToPath(new URL("../css/tokens.css", import.meta.url)), "utf8");
-const props = new Map(
-  [...css.matchAll(/^\s*--([A-Za-z0-9_.-]+):\s*([^;]+);/gm)].map((m) => [m[1], m[2].trim()]),
-);
 
 const HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
-const colorTokens = [...props].filter(([, value]) => HEX.test(value)).map(([name]) => name);
+const parseProps = (text) =>
+  new Map([...text.matchAll(/^\s*--([A-Za-z0-9_-]+):\s*([^;]+);/gm)].map((m) => [m[1], m[2].trim()]));
+const colorNames = (text) => {
+  const block = /\/\* color \*\/([\s\S]*?)(?=\/\* |\n\})/.exec(text);
+  return block ? [...block[1].matchAll(/--([A-Za-z0-9_-]+):/g)].map((m) => m[1]) : [];
+};
+// → { hex } or { error }. Only #rgb / #rrggbb and var(--…) chains are supported color values.
+const resolveColor = (props, name, seen = new Set()) => {
+  const value = props.get(name);
+  if (value === undefined) return { error: `--${name} missing` };
+  const alias = /^var\(--([A-Za-z0-9_-]+)\)$/.exec(value);
+  if (alias) {
+    if (seen.has(name)) return { error: `--${name}: alias cycle` };
+    seen.add(name);
+    return resolveColor(props, alias[1], seen);
+  }
+  if (HEX.test(value)) return { hex: value };
+  return { error: `--${name}: unsupported color value ${value} (only #rgb, #rrggbb or var(--…))` };
+};
+const unclassified = (names, pairs, nonText) => {
+  const foregrounds = new Set(pairs.map(([fg]) => fg));
+  return names.filter((name) => !foregrounds.has(name) && !nonText.has(name));
+};
+
+const props = parseProps(css);
+const colors = colorNames(css);
 
 // [foreground, background, minimum contrast] — WCAG AA: text 4.5:1; form-control border and
 // focus ring 3:1. A color token used as a foreground must appear here.
@@ -56,37 +80,58 @@ const contrast = (a, b) => {
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
   return (hi + 0.05) / (lo + 0.05);
 };
-const color = (name) => {
-  const value = props.get(name);
-  assert.ok(value !== undefined, `--${name} missing from tokens.css`);
-  assert.match(value, HEX, `--${name} is not a hex color: ${value}`);
-  return value;
+const hexOf = (name) => {
+  const resolved = resolveColor(props, name);
+  assert.ok(resolved.hex, resolved.error);
+  return resolved.hex;
 };
+
+test("color analysis handles aliases, alpha and functions", () => {
+  const fixture = [
+    ":root {",
+    "  /* color */",
+    "  --bg: #ffffff;",
+    "  --text: #000000;",
+    "  --link: var(--text);",
+    "  --overlay: #0f172a99;",
+    "  --tint: rgb(0 0 0);",
+    "  /* type */",
+    "  --font-sans: system-ui;",
+    "}",
+  ].join("\n");
+  const fixtureProps = parseProps(fixture);
+  assert.deepEqual(colorNames(fixture), ["bg", "text", "link", "overlay", "tint"]);
+  assert.equal(resolveColor(fixtureProps, "link").hex, "#000000");
+  assert.match(resolveColor(fixtureProps, "overlay").error, /unsupported color value #0f172a99/);
+  assert.match(resolveColor(fixtureProps, "tint").error, /unsupported color value rgb\(0 0 0\)/);
+  assert.deepEqual(unclassified(colorNames(fixture), [["text", "bg", 4.5]], new Set(["bg"])), ["link", "overlay", "tint"]);
+});
+
+test("every color value is a supported hex or alias", () => {
+  const errors = colors.map((name) => resolveColor(props, name).error).filter(Boolean);
+  assert.ok(colors.length > 0, "no /* color */ block in tokens.css");
+  assert.deepEqual(errors, [], errors.join("; "));
+});
 
 test("required color tokens are present", () => {
   const required = [
     "bg", "surface", "text", "text-muted", "border", "accent", "on-accent", "focus", "danger",
     ...["pending", "approved", "rejected", "cancelled"].flatMap((s) => [`status-${s}-bg`, `status-${s}-text`]),
   ];
-  const missing = required.filter((name) => !colorTokens.includes(name));
+  const missing = required.filter((name) => !colors.includes(name));
   assert.deepEqual(missing, [], `missing color tokens: ${missing.join(", ")}`);
 });
 
 test("contrast pairs meet WCAG AA", () => {
-  const failures = PAIRS.map(([fg, bg, min]) => [fg, bg, min, contrast(color(fg), color(bg))])
+  const failures = PAIRS.map(([fg, bg, min]) => [fg, bg, min, contrast(hexOf(fg), hexOf(bg))])
     .filter(([, , min, ratio]) => ratio < min)
     .map(([fg, bg, min, ratio]) => `${fg} on ${bg}: ${ratio.toFixed(2)} < ${min}`);
   assert.deepEqual(failures, [], failures.join("; "));
 });
 
 test("every color token is classified", () => {
-  const foregrounds = new Set(PAIRS.map(([fg]) => fg));
-  const unclassified = colorTokens.filter((name) => !foregrounds.has(name) && !NON_TEXT.has(name));
-  assert.deepEqual(
-    unclassified,
-    [],
-    `color tokens with no contrast pair and not marked non-text: ${unclassified.join(", ")}`,
-  );
+  const missing = unclassified(colors, PAIRS, NON_TEXT);
+  assert.deepEqual(missing, [], `color tokens with no contrast pair and not marked non-text: ${missing.join(", ")}`);
 });
 
 test("type styles use the system font stack", () => {
