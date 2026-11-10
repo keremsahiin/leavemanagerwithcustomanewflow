@@ -1,6 +1,6 @@
 # Spec 0001 — UI/UX tasarım akışı (Claude Design)
 
-- Status: In progress
+- Status: Shipped
 - Mode: lite
 - Plan: `specs/plans/0001-plan.md`
 - Self-critique: done
@@ -77,40 +77,64 @@ spec'lerin "User experience" bölümleridir.
   2026-11-09, iki ayrı yetenek ve teslimat.
 
 ## Acceptance criteria
-- [ ] AC-1 — Proje akış belgesi R-1…R-8'i adım adım (ANALYZE → PLAN → BUILD → VERIFY → SHIP, ve
+- [x] AC-1 — Proje akış belgesi R-1…R-8'i adım adım (ANALYZE → PLAN → BUILD → VERIFY → SHIP, ve
   R-08) tanımlar ve `AGENTS.md` "Where things live" tablosundan bağlantılıdır.
-- [ ] AC-2 — Provada, örnek bir UI spec'i için ANALYZE, spec onayını istemeden önce UX bölümündeki
+- [x] AC-2 — Provada, örnek bir UI spec'i için ANALYZE, spec onayını istemeden önce UX bölümündeki
   her ekran × durum için birer artboard içeren tek bir Design canvas'ı üretir.
-- [ ] AC-3 — Provada canvas'ta UX'teki bir durumun artboard'u yoksa onay istenmez ve eksik
+- [x] AC-3 — Provada canvas'ta UX'teki bir durumun artboard'u yoksa onay istenmez ve eksik
   durumlar adlarıyla listelenir.
-- [ ] AC-4 — Provada onaydan sonra spec'in "Design reference" satırı canvas linkini, sürüm
+- [x] AC-4 — Provada onaydan sonra spec'in "Design reference" satırı canvas linkini, sürüm
   etiketini ve onay tarihini taşır; repoda hiçbir tasarım dosyası veya görseli yoktur ve
   `./scripts/doctor` evidence uyarısı vermez.
-- [ ] AC-5 — Provada UX bölümü `none — no user interface` olan bir spec'te tasarım adımı
+- [x] AC-5 — Provada UX bölümü `none — no user interface` olan bir spec'te tasarım adımı
   çalışmaz ve canvas oluşmaz.
-- [ ] AC-6 — Provada onaylı bir tasarım için değişiklik istendiğinde akış R-08'e yönlendirir:
+- [x] AC-6 — Provada onaylı bir tasarım için değişiklik istendiğinde akış R-08'e yönlendirir:
   yeni sürüm etiketi, spec revizyonu ve yeniden onay; önceki etiket spec geçmişinde kalır.
-- [ ] AC-7 — Akış belgesi ve Claude Code tarafı, UI adımı olan bir planın onaylı tasarım
+- [x] AC-7 — Akış belgesi ve Claude Code tarafı, UI adımı olan bir planın onaylı tasarım
   sürümünü kaynak göstermesini ve BUILD'in onu okumasını şart koşar.
-- [ ] AC-8 — Provada (geçici, statik bir örnek sayfayla) SHIP galerisi her ekran × durum için
+- [x] AC-8 — Provada (geçici, statik bir örnek sayfayla) SHIP galerisi her ekran × durum için
   tasarımı ve ekran görüntüsünü yan yana sunar; karşılığı olmayan durum işaretlenir.
-- [ ] AC-9 — Claude Code dışındaki araçlar için akış belgesi aynı kuralları elle izleme yolunu
+- [x] AC-9 — Claude Code dışındaki araçlar için akış belgesi aynı kuralları elle izleme yolunu
   tarif eder; `./scripts/doctor` 0 fail verir.
-- [ ] AC-10 — ADR-0003 `Accepted` durumundadır, ANEW-0008'i bu proje için genişlettiğini söyler
+- [x] AC-10 — ADR-0003 `Accepted` durumundadır, ANEW-0008'i bu proje için genişlettiğini söyler
   ve ona bağlanır; `git diff main -- workflows/segments.md prompts/ docs/decisions/anew/` boştur.
 
+## Evidence
+Kanıt işaretçidir (`docs/testing.md`, Evidence policy); ayrıntı ve birebir alıntılar planın
+`## Build evidence` bölümünde ve PR #2 açıklamasında. VERIFY: bağımsız QA (`reviewer` subagent)
+@870d226, fix-3 diff'i @a2fa77e — boşluk yok. Prova canvas'ı:
+https://claude.ai/artifact/WWDsf3dS7tcRiApMkURoHN (private).
+
+| Kriter | Kanıt (işaretçi) | Teyit |
+|---|---|---|
+| AC-1 | `workflows/ui-design.md` R-1…R-8 bölümleri; `AGENTS.md` "Where things live" satırı | QA @a2fa77e |
+| AC-2 | canvas sürümü 1794242243-755a: kapak + 5 artboard, onaydan önce | teyit: Kerem Şahin, SHIP, 2026-11-10 |
+| AC-3 | ara sürüm 1794242209-4770 ("Yükleniyor" yok); "Eksik: İzin taleplerim — Yükleniyor" | teyit: Kerem Şahin, SHIP, 2026-11-10 |
+| AC-4 | `spec-9001-v1` (1794242286-5295) satırı; repoda tasarım/görsel yok; `./scripts/doctor` evidence uyarısı yok | QA @a2fa77e + teyit: Kerem Şahin, SHIP, 2026-11-10 |
+| AC-5 | 9002 için birebir ret; "spec 9002" canvas'ı yok | teyit: Kerem Şahin, SHIP, 2026-11-10 |
+| AC-6 | ret → R-08 → `spec-9001-v2` (1794242381-8775), `Önceki: spec-9001-v1` | teyit: Kerem Şahin, SHIP, 2026-11-10 |
+| AC-7 | `workflows/ui-design.md` PLAN ve BUILD; `.claude/commands/plan.md`, `build.md` | QA @a2fa77e |
+| AC-8 | `spec-9001-v2-ship` (1794242582-d931): SHIP sayfası, 4 durum yan yana, UYGULAMADA YOK / TASARIMDA YOK | teyit: Kerem Şahin, SHIP, 2026-11-10 |
+| AC-9 | `workflows/ui-design.md` "Elle yol"; Cursor/Copilot/Codex karşılıkları; `./scripts/doctor` 0 fail | QA @a2fa77e |
+| AC-10 | ADR-0003 Accepted + ANEW-0008 bağlantısı; korunan dosyalarda main'e karşı diff boş | QA @a2fa77e |
+
+Full green: `scripts/check.conf` adımsız — `./scripts/check` greenfield no-op (çıkış 0, `CHECK GREEN`
+satırı yok). CI @a2fa77e success: run 42667955029 (push) ve 42668106855 (PR) — `doctor --strict`,
+`selftest`, `check`. Ship commit'i yalnız `specs/`'e dokunur ve bu yeşili devralır
+(`docs/testing.md`, Two speeds, rule 6): `git diff --name-only a2fa77e HEAD -- . ':!specs/'` boş.
+
 ## Definition of Done
-- [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
-- [ ] `scripts/check` green
-- [ ] Independent review done; real findings fixed, noise rejected with written rationale, deferred ones in `specs/backlog.md`
-- [ ] Docs / ADRs updated if behavior or architecture changed
-- [ ] Spec moved to `specs/done/` (it becomes immutable there)
+- [x] Every acceptance criterion mapped to proof (test or reproducible observation)
+- [x] `scripts/check` green — greenfield no-op (check.conf adımsız), CI yeşil; bkz. Evidence
+- [x] Independent review done; real findings fixed, noise rejected with written rationale, deferred ones in `specs/backlog.md`
+- [x] Docs / ADRs updated if behavior or architecture changed
+- [x] Spec moved to `specs/done/` (it becomes immutable there)
 
 ## Scorecard (fill at ship — honest numbers make the process improvable)
 | Metric | Value |
 |---|---|
-| Spec revisions | |
-| Fix rounds | |
-| Review findings: real / noise / deferred | |
-| Regressions introduced | |
-| Bugs escaped to production | |
+| Spec revisions | 0 (onaydan sonra yalnız Status değişti) |
+| Fix rounds | 3 (fix-1: 9 bulgu · fix-2: 3 · fix-3: 1) |
+| Review findings: real / noise / deferred | 13 / 0 / 0 (round 1: 9 · round 2: 3 · VERIFY: 1) |
+| Regressions introduced | 0 |
+| Bugs escaped to production | 0 (süreç işi; üretim yok) |
