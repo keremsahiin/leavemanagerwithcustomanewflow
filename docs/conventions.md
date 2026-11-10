@@ -85,8 +85,9 @@ Walking skeleton bu adımları `scripts/check.conf` içinde etkinleştirir; o za
 
 **Etkin (spec 0002, `test-js` adımı):**
 - Ham renk yasağı — `frontend/` altındaki `*.css`, `*.js`, `*.html` dosyalarında hex renk ve renk
-  fonksiyonu (`rgb()`, `hsl()`, `oklch()`…) yalnız `css/tokens.css`'te; harici font isteği
-  (`@import`, uzak `url()`, Google Fonts) hiçbir yerde. İhlal dosya:satır ile raporlanır
+  fonksiyonu (`rgb()`, `hsl()`, `oklch()`…) yalnız `css/tokens.css`'te; harici font veya stil
+  isteği (uzak `@import`, uzak `url()`, başka kökene `<link href>`, Google Fonts) hiçbir yerde —
+  yerel `@import "./tokens.css"` serbest. İhlal dosya:satır ile raporlanır
   (`frontend/tests/no-raw-colors.test.js`). Adlı renkler (`red`, `white`…) review'da yakalanır.
 - Kontrast — her metin/zemin token çifti WCAG AA (4.5:1; form sınırı ve odak 3:1); her renk
   token'ı ya bir çiftin ön planı ya "non-text" listesinde (`frontend/tests/tokens.test.js`).

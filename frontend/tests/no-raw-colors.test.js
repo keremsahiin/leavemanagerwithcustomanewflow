@@ -30,7 +30,10 @@ const RAW_HEX_LINE_START = /^#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})
 const COLOR_FN =
   /\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(|\bcolor\(\s*(?:srgb(?:-linear)?|display-p3|a98-rgb|prophoto-rgb|rec2020|xyz(?:-d50|-d65)?)\b/gi;
 const RAW_COLOR = [RAW_HEX, RAW_HEX_LINE_START, COLOR_FN];
-const EXTERNAL_FONT = /@import\b|url\(\s*["']?(?:https?:)?\/\/|fonts\.(?:googleapis|gstatic)\.com/gi;
+// External font or stylesheet requests: a remote @import or url(), a <link href> to another origin,
+// Google Fonts anywhere. A local @import ("./tokens.css") is same-origin and allowed (CSP 'self').
+const EXTERNAL_FONT =
+  /@import\s+(?:url\(\s*)?["']?(?:https?:)?\/\/|url\(\s*["']?(?:https?:)?\/\/|<link\b[^>]*\bhref\s*=\s*["']?(?:https?:)?\/\/|fonts\.(?:googleapis|gstatic)\.com/gi;
 
 const findings = (text, ...patterns) =>
   text.split(/\r?\n/).flatMap((line, i) =>
@@ -70,10 +73,14 @@ test("detector flags external font requests", () => {
     '@import url("https://fonts.googleapis.com/css2?family=Inter");',
     "@font-face { src: url(//cdn.example.com/f.woff2); }",
     ".ok { font-family: var(--font-sans); }",
+    '@import "./tokens.css";',
+    '<link rel="stylesheet" href="https://use.typekit.net/abc.css">',
+    '<link rel="stylesheet" href="css/tokens.css">',
+    "@import 'https://fonts.bunny.net/css?family=x';",
   ].join("\n");
   assert.deepEqual(
     [...new Set(findings(fixture, EXTERNAL_FONT).map((f) => f.line))],
-    [1, 2],
+    [1, 2, 5, 7],
   );
 });
 
