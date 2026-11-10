@@ -132,7 +132,11 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
   sistemin linkini ve sürüm kimliğini taşır, elle düzenlenmez. Adlandırma: `docs/conventions.md`
   (Naming). Ham renk yalnız bu dosyada (`docs/conventions.md`, Enforced by tooling).
 - **Senkron (R-7) — sıra:**
-  1. Değişiklik önce Design System'de yapılır: token, kullanım notu, README.
+  1. Değişiklik önce Design System'de yapılır: token, kullanım notu, README. Sınırlar: renk değeri
+     `#rgb`, `#rrggbb` ya da başka bir renk token'ına alias (`{ad}`); tek tema, tek font ailesi,
+     font dosyası yok; ölçüler birimli (`px`, `rem`, `em`, `%`), ağırlık 100–900. Fazlası (alfa,
+     `rgb()`, ikinci tema, yeni bir token ailesi) bir spec değişikliğidir — dönüştürücü ve testler
+     onu reddeder.
   2. Sistemin `project/tokens.json`'u repo dışında geçici bir klasöre okunur ve okunan sürüm not
      edilir (Claude Code: okuma `from version <id>` bildirir; elle: sürüm geçmişindeki tarih/saat).
      Sistem sayfası açılınca kendi indeksini kaydedip yeni bir sürüm yayınlayabilir (spec 0002
