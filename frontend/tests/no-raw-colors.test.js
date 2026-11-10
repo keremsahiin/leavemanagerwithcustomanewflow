@@ -12,10 +12,12 @@ const TOKENS = join(FRONTEND, "css", "tokens.css");
 const TESTS = join(FRONTEND, "tests");
 const ROOT = join(FRONTEND, "..");
 
+// Our own sources only: tests, dependencies (node_modules) and dot-directories are not scanned.
+const SKIP_DIR = (path, name) => path === TESTS || name === "node_modules" || name.startsWith(".");
 const walk = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const path = join(dir, entry.name);
-    if (entry.isDirectory()) return path === TESTS ? [] : walk(path);
+    if (entry.isDirectory()) return SKIP_DIR(path, entry.name) ? [] : walk(path);
     return /\.(css|js|html)$/i.test(entry.name) ? [path] : [];
   });
 
