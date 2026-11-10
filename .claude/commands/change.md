@@ -23,3 +23,6 @@ request: $ARGUMENTS
      Approved spec, /build needs the filled "Approved by / on" line — the plan gate is never
      skipped in this lane. One-pass review (workflows/segments.md, "The chainer") may join
      /review and /verify in the `reviewer` subagent when its conditions hold.
+Project flow — a UI mini-spec (a filled `Design:` line, or Changed behavior that touches a screen)
+follows workflows/ui-design.md: `/design <NNNN>` inside ANALYZE (mini) before spec approval, the
+lock right after it, `/design <NNNN> ship` before the ship gate.

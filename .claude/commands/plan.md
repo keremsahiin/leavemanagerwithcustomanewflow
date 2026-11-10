@@ -9,3 +9,5 @@ Entry check first: refuse with the segment's exact message unless specs/active/$
 says "Status: Approved". Then prompts/plan.md, the plan approval gate, record
 "Approved by / on: <name>, <date>" in specs/plans/$ARGUMENTS-plan.md, write the handoff, STOP.
 Write no code; never start the build.
+Project flow — a UI spec: the plan cites the locked design (`Tasarım: <link> — spec-NNNN-vK`,
+workflows/ui-design.md, PLAN and BUILD).

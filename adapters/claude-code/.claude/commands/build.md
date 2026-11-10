@@ -9,3 +9,6 @@ Entry check first: refuse with the segment's exact message unless specs/plans/$A
 has a filled "Approved by / on" line. Set the spec to "Status: In progress" (or resume if it
 already is), then prompts/build.md. End with real ./scripts/check output and the changed-file
 list against the plan (as amended), write the handoff, STOP. Never review your own build.
+Project flow — a UI spec: build the UI steps from the locked design's artboards (workflows/ui-design.md,
+PLAN and BUILD); first compare the canvas's current version id with the lock's, or with the last id
+recorded in the plan's Build evidence (its lock check): different → stop and ask (R-08).

@@ -22,3 +22,5 @@ line and resume from the next gate — never open a twin spec. For REVIEW, deleg
 `reviewer` subagent; bring its findings back for triage before any fixes. When the one-pass
 review conditions hold (workflows/segments.md, "The chainer"), ask the subagent for it: on a
 clean verdict it adds the VERIFY evidence table to its report.
+Project flow — a UI spec follows workflows/ui-design.md: `/design <NNNN>` before spec approval,
+the design lock right after it, `/design <NNNN> ship` before the ship gate.
