@@ -37,7 +37,7 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
 2. **Ekran × durum listesi** UX bölümünden (mini-spec: Changed ve Preserved behavior'dan)
    çıkarılır.
 3. **Design system.** Projenin design system'i (Claude'da "Leave Manager" adlı Design System
-   artifact'i, spec 0002) varsa canvas onu kurar. Yoksa geçici bir görünümle devam edilir ve
+   artifact'i — aşağıda "Design system") varsa canvas onu kurar. Yoksa geçici bir görünümle devam edilir ve
    "design system yok" notu kapağa ve spec'in tasarım satırına düşer. Design system
    sonradan geldiğinde böyle bir tasarım kendiliğinden güncellenmez; gerekirse R-08.
 4. **Canvas** oluşturulur veya güncellenir: listedeki her ekran × durum için bir artboard.
@@ -123,6 +123,32 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
    linki>, SHIP sayfası`. Benzerlik kararı insanındır; otomatik görsel diff yoktur.
 4. Geçici görüntü dizini SHIP'ten sonra silinir. Canvas'a yüklenen görüntüler private kalır
    (PR eki gibi); repoya hiçbir tasarım dosyası veya görseli girmez (ANEW-0006).
+
+## Design system (spec 0002)
+- **Sistem:** Claude'da **"Leave Manager"** adlı Design System —
+  https://claude.ai/artifact/7E5hnx89jpK4wkPs1NSgrC. Renk, yazı, boşluk ve köşe yarıçapının tek
+  kaynağı; kullanım kuralları README'sinde. Canvas'lar (ANALYZE, adım 3) bu sistemi bu adla kurar.
+- **Kod tarafı:** `frontend/css/tokens.css` — sistemin belirli bir sürümünden üretilir, başlığı
+  sistemin linkini ve sürüm kimliğini taşır, elle düzenlenmez. Adlandırma: `docs/conventions.md`
+  (Naming). Ham renk yalnız bu dosyada (`docs/conventions.md`, Enforced by tooling).
+- **Senkron (R-7) — sıra:**
+  1. Değişiklik önce Design System'de yapılır: token, kullanım notu, README. Sınırlar: renk değeri
+     `#rgb`, `#rrggbb` ya da başka bir renk token'ına alias (`{ad}`); tek tema, tek font ailesi,
+     font dosyası yok; ölçüler birimli (`px`, `rem`, `em`, `%`), ağırlık 100–900. Fazlası (alfa,
+     `rgb()`, ikinci tema, yeni bir token ailesi) bir spec değişikliğidir — dönüştürücü ve testler
+     onu reddeder.
+  2. Sistemin `project/tokens.json`'u repo dışında geçici bir klasöre okunur ve okunan sürüm not
+     edilir (Claude Code: okuma `from version <id>` bildirir; elle: sürüm geçmişindeki tarih/saat).
+     Sistem sayfası açılınca kendi indeksini kaydedip yeni bir sürüm yayınlayabilir (spec 0002
+     BUILD'inde görüldü); başlığa yazılan, token'ların **okunduğu** sürümdür.
+  3. `node tools/tokens-to-css.mjs <tokens.json> <sistem linki> <sürüm> --out frontend/css/tokens.css`
+     — deterministik: aynı girdi aynı çıktıyı verir. Betik dosyayı kendisi, UTF-8 ve yalnız tam
+     başarıdan sonra yazar; çıktıyı kabukla dosyaya yönlendirmeyin (`docs/conventions.md`, T-6).
+  4. `./scripts/check`: kontrast ve ham renk testleri. Yeni bir renk token'ı
+     `frontend/tests/tokens.test.js`'te bir çiftin ön planı ya da non-text olarak sınıflandırılır;
+     sınıflandırılmamış token testi kırmızıya düşürür.
+  5. Değişiklik bir spec ile gelir (AGENTS.md kural 1); `tokens.css` diff'i review'da okunur.
+- Sistemin dosyaları (`tokens.json`, README, kapak) repoya kopyalanmaz (ADR-0003).
 
 ## Claude Code
 - `/design <NNNN>` — ANALYZE adımları 2–8: canvas'ı oluşturur/günceller, kapsama kontrolü,

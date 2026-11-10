@@ -31,6 +31,9 @@
 - JSON alanları: `snake_case` (Pydantic varsayılanı; alias yok).
 - JS: değişken/fonksiyon `camelCase`, dosya `kebab-case.js`; CSS sınıfları `kebab-case`.
 - Frontend testleri: `frontend/tests/<ekran>.test.js`.
+- CSS custom property'leri (design token'ları, spec 0002): `--<token adı>` (önek yok, Design
+  System'deki adla birebir); yazı stili `--<stil>-size`, `--<stil>-line`, `--<stil>-weight`; aile
+  `--font-<aile>`. Kaynak: `frontend/css/tokens.css` (üretilir, elle düzenlenmez).
 
 ## Error handling
 - `domain` ve `services` tipli istisna fırlatır: `BusinessRuleViolation(code="BR-n")`,
@@ -65,6 +68,10 @@
 - T-4: JS'te `new Date("2026-11-09")` UTC gece yarısı olarak okunur, bazı saat dilimlerinde gün
   kayar — tarihler JS'te `YYYY-MM-DD` string kalır; gösterim string bölerek veya
   `timeZone: "UTC"` ile — from bootstrap 2026-11-09.
+- T-6: Repoya girecek bir dosyayı kabuk yönlendirmesiyle üretmek (`araç > dosya`) — hata olursa
+  kabuk dosyayı önceden boşaltmış olur; Windows PowerShell 5.1'de `>` UTF-16 yazar, konsol kod
+  sayfası Türkçe karakterleri ve "—" işaretini bozar — üreten araç dosyayı kendisi, UTF-8 ve yalnız
+  başarıdan sonra yazar (`--out`) — from spec 0002, review round 1 (L-4), A-1.
 
 ## Enforced by tooling
 Walking skeleton bu adımları `scripts/check.conf` içinde etkinleştirir; o zamana kadar planlıdır.
@@ -75,3 +82,12 @@ Walking skeleton bu adımları `scripts/check.conf` içinde etkinleştirir; o za
 - import-linter — `docs/architecture.md` "Forbidden dependencies" sözleşmeleri.
 - Frontend'de HTML sink yasağı — `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`
   `frontend/` JS dosyalarında bulunursa check kırmızı (`docs/security.md`, Input & output).
+
+**Etkin (spec 0002, `test-js` adımı):**
+- Ham renk yasağı — `frontend/` altındaki `*.css`, `*.js`, `*.html` dosyalarında hex renk ve renk
+  fonksiyonu (`rgb()`, `hsl()`, `oklch()`…) yalnız `css/tokens.css`'te; harici font veya stil
+  isteği (uzak `@import`, uzak `url()`, başka kökene `<link href>`, Google Fonts) hiçbir yerde —
+  yerel `@import "./tokens.css"` serbest. İhlal dosya:satır ile raporlanır
+  (`frontend/tests/no-raw-colors.test.js`). Adlı renkler (`red`, `white`…) review'da yakalanır.
+- Kontrast — her metin/zemin token çifti WCAG AA (4.5:1; form sınırı ve odak 3:1); her renk
+  token'ı ya bir çiftin ön planı ya "non-text" listesinde (`frontend/tests/tokens.test.js`).
