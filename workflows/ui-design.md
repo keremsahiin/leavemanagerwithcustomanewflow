@@ -126,7 +126,7 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
 
 ## Design system (spec 0002)
 - **Sistem:** Claude'da **"Leave Manager"** adlı Design System —
-  https://claude.ai/artifact/Mq5rdUvPvTpeBsL3qQrwWr. Renk, yazı, boşluk ve köşe yarıçapının tek
+  https://claude.ai/artifact/7E5hnx89jpK4wkPs1NSgrC. Renk, yazı, boşluk ve köşe yarıçapının tek
   kaynağı; kullanım kuralları README'sinde. Canvas'lar (ANALYZE, adım 3) bu sistemi bu adla kurar.
 - **Kod tarafı:** `frontend/css/tokens.css` — sistemin belirli bir sürümünden üretilir, başlığı
   sistemin linkini ve sürüm kimliğini taşır, elle düzenlenmez. Adlandırma: `docs/conventions.md`
