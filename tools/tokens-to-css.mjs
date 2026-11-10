@@ -56,7 +56,13 @@ if (!Array.isArray(tokens.color.themes) || tokens.color.themes.length !== 1) {
 const theme = tokens.color.themes[0]?.id;
 if (!theme) fail("color.themes[0].id missing");
 onlyKeys(tokens.type, ["fonts", "families", "groups"], "type");
-if ((tokens.type.fonts ?? []).length) fail("type.fonts: font files are not supported — the system font stack only (spec 0002, R-2)");
+// Empty or absent only — a non-empty array or object (a font file in either shape) is refused.
+if (Object.keys(tokens.type.fonts ?? {}).length) fail("type.fonts: font files are not supported — the system font stack only (spec 0002, R-2)");
+const array = (value, where) => {
+  if (value === undefined) return [];
+  if (!Array.isArray(value)) fail(`${where}: expected a list`);
+  return value;
+};
 const families = Object.keys(tokens.type.families ?? {});
 if (families.length !== 1) fail(`type.families: exactly one family is supported, found ${families.length}`);
 
@@ -86,7 +92,7 @@ const colorValue = (token) => {
 const list = (family) => {
   if (tokens[family] === undefined) return [];
   onlyKeys(tokens[family], family === "color" ? ["themes", "tokens"] : ["tokens"], family);
-  return tokens[family].tokens ?? [];
+  return array(tokens[family].tokens, `${family}.tokens`);
 };
 const lengthToken = (family) => (t) => {
   onlyKeys(t, ["name", "value", "usage"], `${family} ${t.name}`);
@@ -106,10 +112,10 @@ const lines = [
   `  /* type */`,
   ...Object.entries(tokens.type?.families ?? {}).map(([family, stack]) => declare(`font-${family}`, stack)),
 ];
-for (const group of tokens.type?.groups ?? []) {
+for (const group of array(tokens.type.groups, "type.groups")) {
   onlyKeys(group, ["name", "family", "styles"], `type group ${group.name}`);
   if (group.family !== undefined && group.family !== families[0]) fail(`type group ${group.name}: unknown family "${group.family}"`);
-  for (const style of group.styles ?? []) {
+  for (const style of array(group.styles, `type group ${group.name} styles`)) {
     onlyKeys(style, ["name", "fontSize", "lineHeight", "fontWeight"], `type style ${style.name}`);
     const weight = Number(style.fontWeight);
     if (!Number.isInteger(weight) || weight < 100 || weight > 900) fail(`type style ${style.name}: fontWeight "${style.fontWeight}" is not 100–900`);
