@@ -1,6 +1,6 @@
 # Spec 0002 — Leave Manager design system ve token'ların frontend CSS'ine aktarımı
 
-- Status: In progress
+- Status: Shipped
 - Mode: lite
 - Plan: `specs/plans/0002-plan.md`
 - Self-critique: done
@@ -63,38 +63,57 @@ none — no user interface. Design System bir uygulama ekranı değildir; `/desi
   doğrular (`reviewer` subagent'ının Artifact erişimi yoktur).
 
 ## Acceptance criteria
-- [ ] AC-1 — Claude'da "Leave Manager" başlıklı tek bir Design System vardır; README'si, kapağı
+- [x] AC-1 — Claude'da "Leave Manager" başlıklı tek bir Design System vardır; README'si, kapağı
   ve R-1'deki token aileleri (renk, yazı, boşluk, yarıçap) bulunur; her token'ın kullanım notu
   vardır; README "marka kaynağı yok" notunu taşır.
-- [ ] AC-2 — Renk token'ları tek tema ("light") içerir ve R-1'deki dokuz temel rengi ve dört
+- [x] AC-2 — Renk token'ları tek tema ("light") içerir ve R-1'deki dokuz temel rengi ve dört
   talep durumunun zemin + metin çiftlerini kapsar.
-- [ ] AC-3 — Yazı stilleri 5–7 adettir ve sistem font yığınını kullanır; token dosyasında ve
+- [x] AC-3 — Yazı stilleri 5–7 adettir ve sistem font yığınını kullanır; token dosyasında ve
   frontend CSS'inde harici font isteği (`@import`, `url(http…)`, font CDN'i) yoktur.
-- [ ] AC-4 — Token dosyası başlığında Design System'in linki ve sürüm kimliği vardır; dosyadaki
+- [x] AC-4 — Token dosyası başlığında Design System'in linki ve sürüm kimliği vardır; dosyadaki
   her custom property'nin adı ve değeri, o sürümdeki sistemin token'ıyla birebir aynıdır ve
   sistemin her token'ı dosyada vardır.
-- [ ] AC-5 — Kontrast testi, tanımlı her metin/zemin çifti için oranı hesaplar: normal metin
+- [x] AC-5 — Kontrast testi, tanımlı her metin/zemin çifti için oranı hesaplar: normal metin
   ≥ 4.5:1, büyük metin / kenarlık / odak ≥ 3:1; hepsi geçer. Bir çiftin metin rengi bilerek
   açıldığında test kırmızıya düşer; çifti tanımsız bir metin token'ı eklendiğinde de kırmızıya düşer.
-- [ ] AC-6 — `frontend/` altında token dosyası dışındaki bir CSS, JS veya HTML dosyasına ham renk
+- [x] AC-6 — `frontend/` altında token dosyası dışındaki bir CSS, JS veya HTML dosyasına ham renk
   eklendiğinde `./scripts/check` kırmızı olur ve dosya adıyla satırı gösterir; kaldırılınca yeşil olur.
-- [ ] AC-7 — `./scripts/check` ve `./scripts/check --fast` yeni adımlarla yeşildir;
+- [x] AC-7 — `./scripts/check` ve `./scripts/check --fast` yeni adımlarla yeşildir;
   `./scripts/residue` ve `./scripts/residue --fast` clean'dir.
-- [ ] AC-8 — `workflows/ui-design.md` bir "Design system" bölümü içerir: sistemin adı, token
+- [x] AC-8 — `workflows/ui-design.md` bir "Design system" bölümü içerir: sistemin adı, token
   dosyası, R-7'deki senkron sırası ve canvas'ların sistemi kurması.
 
+## Evidence
+Kanıt işaretçidir; ayrıntı planın `## Build evidence` ve `## Triage` bölümlerinde. VERIFY:
+bağımsız doğrulayıcı agent (Artifact okuyabilir, yazmaz) @2e6427f. Design System:
+https://claude.ai/artifact/7E5hnx89jpK4wkPs1NSgrC, sürüm 1794340153-6b2a (`ds-v2`).
+
+| Kriter | Kanıt (işaretçi) |
+|---|---|
+| AC-1 | DS @1794340153-6b2a: başlık "Leave Manager", bu hesapta tek sistem; README (kurallar, "Marka kaynağı yok."), kapak; aileler renk 19 · yazı 1 aile + 6 stil · boşluk 4 · yarıçap 3; kullanım notu 32/32 |
+| AC-2 | DS `themes=["light"]`; `frontend/tests/tokens.test.js` — `required color tokens are present` |
+| AC-3 | `tokens.test.js` — `type styles use the system font stack`; `frontend/tests/no-raw-colors.test.js` — `no external font requests`; kasıtlı bozma (`@import"https://…"`, çok satırlı `<link>`) kırmızı |
+| AC-4 | `frontend/css/tokens.css` başlığı Source/Version = DS + 1794340153-6b2a; bağımsız karşılaştırma 45/45 (eksik/fazla/farklı 0); dönüştürücü çıktısı `cmp` aynı |
+| AC-5 | `tokens.test.js` — `contrast pairs meet WCAG AA`, `every color token is classified`; kasıtlı bozma: `--text-muted` açıldı → "text-muted on bg: 2.45 < 4.5"; `--brand-x` → sınıflandırılmamış |
+| AC-6 | `no-raw-colors.test.js` — `no raw colors outside tokens.css`; kasıtlı bozma: CSS/JS/HTML ham renk → `dosya:satır` ile kırmızı, kaldırılınca yeşil (sınır: B-5) |
+| AC-7 | CHECK GREEN (full, 1 steps, 2 s) ve (fast, 1 steps, 2 s) @2e6427f; RESIDUE CLEAN (full + fast) @2e6427f; CI run 42889281971 @2e6427f success |
+| AC-8 | `workflows/ui-design.md` "Design system (spec 0002)": ad + link, token dosyası, R-7 senkron sırası (sınırlarla), canvas'ların kurması |
+
+Ship commit'i yalnız `specs/`'e dokunur ve 2e6427f'nin yeşilini devralır
+(`git diff --name-only 2e6427f HEAD -- . ':!specs/'` boş).
+
 ## Definition of Done
-- [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
-- [ ] `scripts/check` green
-- [ ] Independent review done; real findings fixed, noise rejected with written rationale, deferred ones in `specs/backlog.md`
-- [ ] Docs / ADRs updated if behavior or architecture changed
-- [ ] Spec moved to `specs/done/` (it becomes immutable there)
+- [x] Every acceptance criterion mapped to proof (test or reproducible observation)
+- [x] `scripts/check` green
+- [x] Independent review done; real findings fixed, noise rejected with written rationale, deferred ones in `specs/backlog.md`
+- [x] Docs / ADRs updated if behavior or architecture changed
+- [x] Spec moved to `specs/done/` (it becomes immutable there)
 
 ## Scorecard (fill at ship — honest numbers make the process improvable)
 | Metric | Value |
 |---|---|
-| Spec revisions | |
-| Fix rounds | |
-| Review findings: real / noise / deferred | |
-| Regressions introduced | |
-| Bugs escaped to production | |
+| Spec revisions | 0 (onaydan sonra yalnız Status değişti) |
+| Fix rounds | 2 (fix-1: 9 bulgu · fix-2: 6) |
+| Review findings: real / noise / deferred | 16 / 3 / 2 (round 1: 9/0/1 · round 2 + VERIFY 1: 6/1/0 · round 3 + VERIFY 2: 1/2/1) |
+| Regressions introduced | 0 |
+| Bugs escaped to production | 0 (henüz üretim yok) |
