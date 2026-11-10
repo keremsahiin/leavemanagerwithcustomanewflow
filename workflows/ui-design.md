@@ -137,8 +137,9 @@ satır tam spec'te **Design reference**, mini-spec'te **`Design:`** satırıdır
      edilir (Claude Code: okuma `from version <id>` bildirir; elle: sürüm geçmişindeki tarih/saat).
      Sistem sayfası açılınca kendi indeksini kaydedip yeni bir sürüm yayınlayabilir (spec 0002
      BUILD'inde görüldü); başlığa yazılan, token'ların **okunduğu** sürümdür.
-  3. `node tools/tokens-to-css.mjs <tokens.json> <sistem linki> <sürüm> > frontend/css/tokens.css`
-     — deterministik: aynı girdi aynı çıktıyı verir.
+  3. `node tools/tokens-to-css.mjs <tokens.json> <sistem linki> <sürüm> --out frontend/css/tokens.css`
+     — deterministik: aynı girdi aynı çıktıyı verir. Betik dosyayı kendisi, UTF-8 ve yalnız tam
+     başarıdan sonra yazar; çıktıyı kabukla dosyaya yönlendirmeyin (`docs/conventions.md`, T-6).
   4. `./scripts/check`: kontrast ve ham renk testleri. Yeni bir renk token'ı
      `frontend/tests/tokens.test.js`'te bir çiftin ön planı ya da non-text olarak sınıflandırılır;
      sınıflandırılmamış token testi kırmızıya düşürür.

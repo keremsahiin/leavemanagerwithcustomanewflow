@@ -2,17 +2,24 @@
 // Spec 0002 (R-4, R-7). Deterministic and dependency-free: the same tokens.json gives the same CSS.
 //
 // Usage:
-//   node tools/tokens-to-css.mjs <tokens.json> <design-system-url> <version-id> > frontend/css/tokens.css
+//   node tools/tokens-to-css.mjs <tokens.json> <design-system-url> <version-id> --out frontend/css/tokens.css
+// The script writes the file itself, UTF-8, and only after the whole conversion succeeded — never
+// redirect stdout into the file (docs/conventions.md, Known traps T-6). Without --out it prints.
 // The tokens.json is read from the "Leave Manager" Design System (workflows/ui-design.md, Design
 // system) into a scratch folder — never into the repo.
 //
 // Mapping (docs/conventions.md, Naming): every token → `--<token name>`; a type style →
 // `--<style>-size`, `--<style>-line`, `--<style>-weight`; a font family → `--font-<family>`.
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
-const [, , file, url, version] = process.argv;
-if (!file || !url || !version) {
-  console.error("usage: node tools/tokens-to-css.mjs <tokens.json> <design-system-url> <version-id>");
+const USAGE = "usage: node tools/tokens-to-css.mjs <tokens.json> <design-system-url> <version-id> [--out <file>]";
+const args = process.argv.slice(2);
+const outAt = args.indexOf("--out");
+const out = outAt === -1 ? undefined : args[outAt + 1];
+if (outAt !== -1) args.splice(outAt, 2);
+const [file, url, version] = args;
+if (!file || !url || !version || args.length !== 3 || (outAt !== -1 && !out)) {
+  console.error(USAGE);
   process.exit(2);
 }
 
@@ -22,7 +29,12 @@ const fail = (message) => {
   process.exit(1);
 };
 
-const tokens = JSON.parse(readFileSync(file, "utf8"));
+let tokens;
+try {
+  tokens = JSON.parse(readFileSync(file, "utf8"));
+} catch (error) {
+  fail(`cannot read ${file}: ${error.message}`);
+}
 const theme = tokens.color?.themes?.[0]?.id;
 if (!theme) fail("color.themes[0].id missing — the first theme is the one written");
 
@@ -69,4 +81,10 @@ for (const family of ["spacing", "radius"]) {
   lines.push(`  /* ${family} */`, ...list(family).map((t) => declare(t.name, t.value)));
 }
 lines.push(`}`, ``);
-process.stdout.write(lines.join("\n"));
+const cssText = lines.join("\n");
+if (out) {
+  writeFileSync(out, cssText, "utf8");
+  console.error(`tokens-to-css: wrote ${out} (${seen.size} custom properties, version ${version})`);
+} else {
+  process.stdout.write(cssText);
+}

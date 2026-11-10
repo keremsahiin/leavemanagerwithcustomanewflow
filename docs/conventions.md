@@ -68,6 +68,10 @@
 - T-4: JS'te `new Date("2026-11-09")` UTC gece yarısı olarak okunur, bazı saat dilimlerinde gün
   kayar — tarihler JS'te `YYYY-MM-DD` string kalır; gösterim string bölerek veya
   `timeZone: "UTC"` ile — from bootstrap 2026-11-09.
+- T-6: Repoya girecek bir dosyayı kabuk yönlendirmesiyle üretmek (`araç > dosya`) — hata olursa
+  kabuk dosyayı önceden boşaltmış olur; Windows PowerShell 5.1'de `>` UTF-16 yazar, konsol kod
+  sayfası Türkçe karakterleri ve "—" işaretini bozar — üreten araç dosyayı kendisi, UTF-8 ve yalnız
+  başarıdan sonra yazar (`--out`) — from spec 0002, review round 1 (L-4), A-1.
 
 ## Enforced by tooling
 Walking skeleton bu adımları `scripts/check.conf` içinde etkinleştirir; o zamana kadar planlıdır.
