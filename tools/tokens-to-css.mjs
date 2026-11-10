@@ -116,7 +116,9 @@ for (const group of array(tokens.type.groups, "type.groups")) {
   onlyKeys(group, ["name", "family", "styles"], `type group ${group.name}`);
   if (group.family !== undefined && group.family !== families[0]) fail(`type group ${group.name}: unknown family "${group.family}"`);
   for (const style of array(group.styles, `type group ${group.name} styles`)) {
-    onlyKeys(style, ["name", "fontSize", "lineHeight", "fontWeight"], `type style ${style.name}`);
+    // `usage` is the style's note in the Design System (spec 0002, AC-1); like a token's usage, it
+    // is documentation and is not written to CSS.
+    onlyKeys(style, ["name", "fontSize", "lineHeight", "fontWeight", "usage"], `type style ${style.name}`);
     const weight = Number(style.fontWeight);
     if (!Number.isInteger(weight) || weight < 100 || weight > 900) fail(`type style ${style.name}: fontWeight "${style.fontWeight}" is not 100–900`);
     lines.push(
