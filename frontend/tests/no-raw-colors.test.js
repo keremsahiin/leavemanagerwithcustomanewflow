@@ -44,7 +44,7 @@ test("detector flags raw colors and spares ids and in-page links", () => {
     ".a { color: #1d4ed8; }",
     ".b { background: rgb(0 0 0); }",
     'el.style.color = "#fff";',
-    "#main { padding: 0; }",
+    "#fade { padding: 0; }",
     '<a href="#add">Ekle</a>',
     ".c { color: var(--text); border-color: transparent; }",
     'form = document.querySelector("#add-form");',
@@ -54,10 +54,14 @@ test("detector flags raw colors and spares ids and in-page links", () => {
     "el.style.color = `#fff`;",
     ".d { color:red;#fff }",
     "#333;",
+    "#add {",
+    ".e { color: #0F172A99; }",
+    ".f { color: hsl(220 90% 40%); }",
+    ".g { color: oklch(0.5 0.1 250); }",
   ].join("\n");
   assert.deepEqual(
     findings(fixture, ...RAW_COLOR).map((f) => f.line),
-    [1, 2, 3, 10, 11, 12, 13],
+    [1, 2, 3, 10, 11, 12, 13, 15, 16, 17],
   );
 });
 
